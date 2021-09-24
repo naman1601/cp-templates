@@ -1,0 +1,25 @@
+<snippet>
+	<content><![CDATA[
+big binary_exponentiation(big n, big M) {
+
+	big retval = 1;
+
+	while(M > 0) {
+
+		if(M & 1) {
+
+			retval = retval * n;
+		}
+
+		M = M >> 1;
+		n = n * n;
+	}
+
+	return retval;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>binexp_nomod</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>

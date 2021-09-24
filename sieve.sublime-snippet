@@ -1,0 +1,44 @@
+<snippet>
+	<content><![CDATA[
+vector<int> isprime;
+vector<int> primes;
+vector<int> spf;
+
+void sieve(big maxn) {
+
+	isprime = vector<int>(maxn, 1);
+	spf = vector<int>(maxn);
+
+	fr(i, 0, maxn) {
+
+		spf[i] = i;
+	}
+
+	for(big i = 2; i < maxn; i++) {
+
+		if(!isprime[i]) continue;
+
+		for(big j = i * i; j < maxn; j += i) {
+
+			isprime[j] = 0;
+
+			if(spf[j] == j) {
+
+				spf[j] = i;
+			}
+		}
+	}
+
+
+	${1:}for(big i = 2; i < maxn; i++) {
+
+		${1:}if(isprime[i]) primes.push_back(i);
+	${1:}}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>sieve</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Naman's Sieve for competitive programming.</description>
+</snippet>

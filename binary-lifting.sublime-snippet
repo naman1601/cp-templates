@@ -1,0 +1,51 @@
+<snippet>
+	<content><![CDATA[
+//requires stuff like maxn and parent_of to be defined, take note
+
+const int maxjump = 17;
+int sparse[maxn][maxjump];
+
+void build_sparse() {
+
+	fr(j, 0, 1) {
+
+		fr(i, 0, n_nodes) {
+
+			sparse[i][j] = parent_of[i];
+		}
+	}
+
+	fr(j, 1, maxjump) {
+
+		fr(i, 0, n_nodes) {
+
+			if(sparse[i][j - 1] != -1) {
+
+				sparse[i][j] = sparse[sparse[i][j - 1]][j - 1];
+			}
+		}
+	}
+}
+
+
+int lift(int node, int jump) {
+
+	if(jump == 0) return node;
+
+	int opt = 0;
+
+	fr(j, 0, maxjump) {
+
+		if((1 << j) > jump) break;
+		opt = j;
+	}
+
+	return lift(sparse[node][opt], (jump - (1 << opt)));
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>binary_lifting</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Naman's binary lifting implementation for trees</description>
+</snippet>

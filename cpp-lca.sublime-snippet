@@ -1,0 +1,119 @@
+<snippet>
+	<content><![CDATA[
+int pl;
+vector<pii> pathvec;
+vector<pii> lca_segtree;
+vector<int> first_appearance;
+vector<int> depth;
+
+pii lca_task(pii child1, pii child2) {
+	
+	if(child1.se < child2.se) {
+
+		return child1;
+
+	} else {
+
+		return child2;
+	}
+}
+
+void lca_update(vector<pii>& segment_tree, int node, int l, int r, int pos, pii val) {
+
+	if(l == r) {
+
+		segment_tree[node] = val;
+
+	} else {
+
+		int mid = (l + r) >> 1;
+
+		if(pos <= mid) {
+
+			lca_update(segment_tree, node << 1, l, mid, pos, val);
+
+		} else {
+
+			lca_update(segment_tree, (node << 1) + 1, mid + 1, r, pos, val);
+		}
+
+		segment_tree[node] = lca_task(segment_tree[node << 1], segment_tree[(node << 1) + 1]);
+	}
+}
+
+pii lca_query(vector<pii>& segment_tree, int node, int l, int r, int lq, int rq) {
+
+	if(lq > rq) {
+
+		return make_pair(1e9, 1e9);
+
+	} else if(lq <= l && rq >= r) {
+
+		return segment_tree[node];
+
+	} else {
+
+		int mid = (l + r) >> 1;
+		return lca_task(lca_query(segment_tree, node << 1, l, mid, lq, min(rq, mid)), lca_query(segment_tree, (node << 1) + 1, mid + 1, r, max(lq, mid + 1), rq));
+	}
+}
+
+void lca_build(vector<pii>& segment_tree, vector<pii>& v, int node, int l, int r) {
+
+	if(l == r) {
+
+		segment_tree[node] = v[l];
+
+	} else {
+
+		int mid = (l + r) >> 1;
+		lca_build(segment_tree, v, node << 1, l, mid);
+		lca_build(segment_tree, v, (node << 1) + 1, mid + 1, r);
+		segment_tree[node] = lca_task(segment_tree[node << 1], segment_tree[(node << 1) + 1]);
+	}
+}
+
+void build_pathvec(int node, int parent) {
+
+	if(first_appearance[node] == -1) {
+
+		first_appearance[node] = pathvec.size();
+	}
+
+	pathvec.push_back(make_pair(node, depth[node]));
+
+	for(int next : adj[node]) {
+
+		if(next != parent) {
+
+			depth[next] = depth[node] + 1;
+			build_pathvec(next, node);
+			pathvec.push_back(make_pair(node, depth[node]));
+		}
+	}
+}
+
+int get_lca(int node1, int node2) {
+
+	pii rv = lca_query(lca_segtree, 1, 0, pl - 1, min(first_appearance[node1], first_appearance[node2]), max(first_appearance[node1], first_appearance[node2]));
+	return rv.fe;
+}
+
+void lca_init(int node) {
+
+	pathvec = vector<pii>();
+	first_appearance = vector<int>(n_nodes, -1);
+	depth = vector<int>(n_nodes, 0);
+	build_pathvec(node, node);
+
+	pl = pathvec.size();
+	lca_segtree = vector<pii>(pl << 2);
+	lca_build(lca_segtree, pathvec, 1, 0, pl - 1);
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>lca</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Naman's LCA snippet!</description>>
+</snippet>

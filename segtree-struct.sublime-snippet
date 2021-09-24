@@ -1,0 +1,95 @@
+<snippet>
+	<content><![CDATA[
+struct segt {
+
+	int tl;
+	vector<${1:int}> t;
+
+	segt(int l, ${1:int} val) {
+
+		tl = l;
+		t = vector<${1:int}>(tl << 2, val);
+	}
+
+	${1:int} task(${1:int} child1, ${1:int} child2) {
+	
+		return ${2:child1 + child2};
+	}
+	
+	void update(int node, int l, int r, int pos, ${1:int} val) {
+	
+		if(l == r) {
+	
+			t[node] = val;
+	
+		} else {
+	
+			int mid = (l + r) >> 1;
+	
+			if(pos <= mid) {
+	
+				update(node << 1, l, mid, pos, val);
+	
+			} else {
+	
+				update((node << 1) + 1, mid + 1, r, pos, val);
+			}
+	
+			t[node] = task(t[node << 1], t[(node << 1) + 1]);
+		}
+	}
+
+	void update(int pos, ${1:int} val) {
+
+		update(1, 0, tl - 1, pos, val);
+	}
+	
+	${1:int} query(int node, int l, int r, int lq, int rq) {
+	
+		if(lq > rq) {
+	
+			return ${3:0};
+	
+		} else if(lq <= l && rq >= r) {
+	
+			return t[node];
+	
+		} else {
+	
+			int mid = (l + r) >> 1;
+			return task(query(node << 1, l, mid, lq, min(rq, mid)), query((node << 1) + 1, mid + 1, r, max(lq, mid + 1), rq));
+		}
+	}
+
+	${1:int} query(int lq, int rq) {
+
+		return query(1, 0, tl - 1, lq, rq);
+	}
+	
+	void build(vector<${1:int}>& v, int node, int l, int r) {
+	
+		if(l == r) {
+	
+			t[node] = v[l];
+	
+		} else {
+	
+			int mid = (l + r) >> 1;
+			build(v, node << 1, l, mid);
+			build(v, (node << 1) + 1, mid + 1, r);
+			t[node] = task(t[node << 1], t[(node << 1) + 1]);
+		}
+	}
+
+	void build(vector<${1:int}>& v) {
+
+		build(v, 1, 0, tl - 1);
+	}
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>segtree-struct</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Naman's segment tree as a struct for basic problems.</description>
+</snippet>

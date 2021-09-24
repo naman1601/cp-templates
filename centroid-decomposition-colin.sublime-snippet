@@ -1,0 +1,123 @@
+<snippet>
+	<content><![CDATA[
+int dist(int u, int v) {
+
+	int LCA = g.get_lca(u, v);
+	// g is an object of LCA
+	return g.dv[u] + g.dv[v] - 2 * g.dv[LCA];
+}
+
+struct centroid_decomposition {
+
+	// USES LCA FOR dist(u, v)
+
+	int n_nodes;
+	vector<vector<int>> adj;
+	vector<int> vtd;
+	vector<int> parent;
+	vector<int> subtree_size;
+	vector<int> dp;
+
+	centroid_decomposition(int n) {
+
+		n_nodes = n;
+		parent.resize(n_nodes, -1);
+		vtd.resize(n_nodes, 0);
+		subtree_size.resize(n_nodes, 0);
+		adj.resize(n_nodes);
+		dp.resize(n_nodes, inf);
+	}
+
+	// void print() {
+
+	// 	fr(i, 0, n_nodes) {
+
+	// 		cout << i + 1 << ": " << parent[i] + 1 << nl;
+	// 	}
+	// }
+
+	void update(int node) {
+
+		dp[node] = 0;
+		int ancestor = node;
+
+		while(ancestor != -1) {
+
+			dp[ancestor] = min(dp[ancestor], dist(node, ancestor) + dp[node]);
+			ancestor = parent[ancestor];
+		}
+	}
+
+	int query(int node) {
+
+		int ancestor = node;
+		int ans = inf;
+
+		while(ancestor != -1) {
+
+			ans = min(ans, dist(node, ancestor) + dp[ancestor]);
+			ancestor = parent[ancestor];
+		}
+
+		return ans;
+	}
+
+	void edge(int u, int v) {
+
+		adj[u].push_back(v);
+		adj[v].push_back(u);
+	}
+
+	void init(int node = 0, int p = -1) {
+
+		get_size(node);
+		int centroid = get_centroid(node, -1, subtree_size[node]);
+		vtd[centroid] = true;
+		parent[centroid] = p;
+
+		for(int next : adj[centroid]) {
+
+			if(vtd[next]) continue;
+
+			init(next, centroid);
+		}
+	}
+
+	int get_size(int node, int p = -1) {
+
+		if(vtd[node]) return 0;
+
+		subtree_size[node] = 1;
+
+		for(int next : adj[node]) {
+
+			if(next == p) continue;
+
+			subtree_size[node] += get_size(next, node);
+		}
+
+		return subtree_size[node];
+	}
+
+	int get_centroid(int node, int p, int sz) {
+
+		for(int next : adj[node]) {
+
+			if(next == p || vtd[next]) continue;
+
+			if(subtree_size[next] > sz / 2) {
+
+				return get_centroid(next, node, sz);
+			}
+		}
+
+		return node;
+	}
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>centroid_decomposition</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Centroid decomposition inspired by Colin Galen</description>
+</snippet>

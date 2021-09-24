@@ -1,0 +1,76 @@
+<snippet>
+	<content><![CDATA[
+struct sparse_table {
+
+	int tl, tl2;
+	vector<vector<int>> t;
+	vector<int> logtable;
+
+	void init(int n) {
+
+		tl = n;
+		tl2 = 1;
+
+		int N = n;
+
+		while(N) {
+
+			tl2++;
+			N >>= 1;
+		}
+
+		t = vector<vector<int>>(tl2, vector<int>(tl, inf));
+
+		logtable.clear();
+		logtable.resize(tl + 1);
+
+		logtable[1] = 0;
+
+		fr(i, 2, tl + 1) {
+
+			logtable[i] = (logtable[i >> 1] + 1);
+		}
+	}
+
+	int task(int x, int y) {
+
+		return min(x, y);
+	}
+
+	void build(vector<int>& v) {
+
+		int n = v.size();
+
+		fr(i, 0, n) {
+
+			t[0][i] = v[i];
+		}
+
+		fr(j, 1, tl2) {
+
+			fr(i, 0, tl) {
+
+				if(i + (1 << (j - 1)) >= tl) {
+
+					break;
+				}
+
+				t[j][i] = task(t[j - 1][i], t[j - 1][i + (1 << (j - 1))]);
+			}
+		}
+	}
+
+	int query(int l, int r) {
+
+		int len = r - l + 1;
+		int jump = (1 << logtable[len]);
+		return task(t[logtable[len]][l], t[logtable[len]][r - (jump - 1)]);
+	}
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>rmq_sparse_table</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Sparse table for range min/max queries in constant time</description>
+</snippet>

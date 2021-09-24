@@ -1,0 +1,90 @@
+<snippet>
+	<content><![CDATA[
+int sack_ans[maxn];
+int sack_is_heavy[maxn];
+int subtree_size[maxn];
+
+
+void sack_size(int node, int parent) {
+
+	subtree_size[node] = 1;
+
+	for(int next : adj[node]) {
+
+		if(next == parent) continue;
+
+		sack_size(next, node);
+		subtree_size[node] += subtree_size[next];
+	}
+}
+
+void sack_add(int node, int parent, int val) {
+
+	sack_ans[attribute[node]] += val;
+
+	// replace attribute with appropriate variable
+
+	for(int next : adj[node]) {
+
+		if(next != parent && (!sack_is_heavy[next])) {
+
+			sack_add(next, node, val);
+		}
+	}
+}
+
+void sack_dfs(int node, int parent, int keep) {
+
+	int heavy_size = -1, heavy = -1;
+
+	for(int next : adj[node]) {
+
+		if(next == parent) continue;
+
+		if(subtree_size[next] > heavy_size) {
+
+			heavy_size = subtree_size[next];
+			heavy = next;
+		}
+	}
+
+	for(int next : adj[node]) {
+
+		if(next != parent && next != heavy) {
+
+			sack_dfs(next, node, 0);
+		}
+	}
+
+	if(heavy != -1) {
+
+		sack_dfs(heavy, node, 1);
+		sack_is_heavy[heavy] = 1;
+	}
+
+	sack_add(node, parent, 1);
+
+	// right now, the sack_ans array contains answers for attributes in the subtree of node
+
+	// for(auto query : qv[node]) {
+
+	// 	ans[query.se] = sack_ans[query.fe];
+	// }
+
+	if(heavy != -1) {
+
+		sack_is_heavy[heavy] = 0;
+	}
+
+	if(!keep) {
+
+		sack_add(node, parent, -1);
+	}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>sack</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Naman's Sack-DSU on trees implementation.</description>
+</snippet>

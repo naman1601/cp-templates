@@ -1,0 +1,28 @@
+<snippet>
+	<content><![CDATA[
+vector<int> mobius;
+
+void mobius_function(big maxn) {
+
+	mobius = vector<int>(maxn, 0);
+	mobius[1] = 1;
+
+	fr(i, 2, maxn) {
+
+		if(spf[i / spf[i]] == spf[i]) {
+
+			mobius[i] = 0;
+
+		} else {
+
+			mobius[i] = -1 * mobius[i / spf[i]];
+		}
+	}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>mobius_function</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Naman's Mobius function implementation</description>
+</snippet>

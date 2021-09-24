@@ -1,0 +1,188 @@
+<snippet>
+	<content><![CDATA[
+struct hld {
+
+	int n, tl;
+	vector<int> t;
+	vector<int> hld_path;
+	vector<int> pos;
+	vector<int> heavy_of;
+	vector<int> head_of;
+	vector<int> parent_of;
+
+	hld(int n_nodes) {
+
+		n = n_nodes;
+		tl = n_nodes;
+
+		hld_path.clear();
+		hld_path.reserve(n);
+		pos.clear();
+		pos.resize(n);
+		heavy_of.clear();
+		heavy_of.resize(n, -1);
+		head_of.clear();
+		head_of.resize(n);
+		parent_of.clear();
+		parent_of.resize(n);
+
+		t.clear();
+		t.resize(tl << 2, 0);
+
+		parent_of[0] = 0;
+		dfs(0);
+		head_of[0] = 0;
+		decompose(0);
+
+		t_build(hld_path);
+	}
+
+	int dfs(int node) {
+
+		int subtree_size = 1;
+		int current_heavy_size = -1;
+
+		for(int next : adj[node]) {
+
+			if(next == parent_of[node]) continue;
+
+			parent_of[next] = node;
+			int next_size = dfs(next);
+			subtree_size += next_size;
+
+			if(next_size > current_heavy_size) {
+
+				current_heavy_size = next_size;
+				heavy_of[node] = next;
+			}
+		}
+
+		return subtree_size;
+	}
+
+	void decompose(int node) {
+
+		pos[node] = hld_path.size();
+		hld_path.push_back(node);
+
+		if(heavy_of[node] != -1) {
+
+			head_of[heavy_of[node]] = head_of[node];
+			decompose(heavy_of[node]);
+		}
+
+		for(int next : adj[node]) {
+
+			if(next == heavy_of[node] || next == parent_of[node]) continue;
+
+			head_of[next] = next;
+			decompose(next);
+		}
+	}
+
+	int t_task(int child1, int child2) {
+	
+		return child1 + child2;
+	}
+	
+	void t_update(int node, int l, int r, int pos, int val) {
+	
+		if(l == r) {
+	
+			t[node] = val;
+	
+		} else {
+	
+			int mid = (l + r) >> 1;
+	
+			if(pos <= mid) {
+	
+				t_update(node << 1, l, mid, pos, val);
+	
+			} else {
+	
+				t_update((node << 1) + 1, mid + 1, r, pos, val);
+			}
+	
+			t[node] = t_task(t[node << 1], t[(node << 1) + 1]);
+		}
+	}
+
+	void t_update(int pos, int val) {
+
+		t_update(1, 0, tl - 1, pos, val);
+	}
+	
+	int t_query(int node, int l, int r, int lq, int rq) {
+	
+		if(lq > rq) {
+	
+			return 0;
+	
+		} else if(lq <= l && rq >= r) {
+	
+			return t[node];
+	
+		} else {
+	
+			int mid = (l + r) >> 1;
+			return t_task(t_query(node << 1, l, mid, lq, min(rq, mid)), t_query((node << 1) + 1, mid + 1, r, max(lq, mid + 1), rq));
+		}
+	}
+
+	int t_query(int lq, int rq) {
+
+		return t_query(1, 0, tl - 1, lq, rq);
+	}
+	
+	void t_build(vector<int>& v, int node, int l, int r) {
+	
+		if(l == r) {
+	
+			t[node] = attribute[v[l]];
+			// replace attribute with appropriate variable
+	
+		} else {
+	
+			int mid = (l + r) >> 1;
+			t_build(v, node << 1, l, mid);
+			t_build(v, (node << 1) + 1, mid + 1, r);
+			t[node] = t_task(t[node << 1], t[(node << 1) + 1]);
+		}
+	}
+
+	void t_build(vector<int>& v) {
+
+		t_build(v, 1, 0, tl - 1);
+	}
+
+	int task(int v1, int v2) {
+
+		return v1 + v2;
+	}
+
+	int query(int node, int ancestor) {
+
+		int retval = 0;
+
+		for(; head_of[node] != head_of[ancestor]; node = parent_of[head_of[node]]) {
+
+			retval = task(retval, t_query(pos[head_of[node]], pos[node]));
+		}
+
+		retval = task(retval, t_query(pos[ancestor], pos[node]));
+		return retval;
+	}
+
+	void update(int node, int value) {
+
+		t_update(pos[node], value);
+	}
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>hld_struct</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Naman's HLD Struct</description>
+</snippet>

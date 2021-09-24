@@ -1,0 +1,79 @@
+<snippet>
+	<content><![CDATA[
+struct centroid_decomposition {
+
+	int n;
+	vector<int> hidden;
+	vector<int> parent;
+	vector<int> subtree_size;
+
+	centroid_decomposition(int N) {
+
+		n = N;
+		hidden.resize(n, 0);
+		parent.resize(n, -1);
+		subtree_size.resize(n, 0);
+	}
+
+	void decompose(int v, int p = -1) {
+
+		get_size(v, -1);
+		int centroid = get_centroid(v, -1, subtree_size[v]);
+		hidden[centroid] = 1;
+		parent[centroid] = p;
+
+		for(int u : adj[centroid]) {
+
+			if(hidden[u]) {
+
+				continue;
+			}
+
+			decompose(u, centroid);
+		}
+	}
+
+	int get_centroid(int v, int p, int sz) {
+
+		for(int u : adj[v]) {
+
+			if(hidden[u] || u == p) {
+
+				continue;
+			}
+
+			if(subtree_size[u] * 2 > sz) {
+
+				return get_centroid(u, v, sz);
+			}
+		}
+
+		return v;
+	}
+
+	int get_size(int v, int p) {
+
+		if(hidden[v]) return 0;
+
+		int sz = 1;
+
+		for(int u : adj[v]) {
+
+			if(hidden[u] || u == p) {
+
+				continue;
+			}
+
+			sz += get_size(u, v);
+		}
+
+		return subtree_size[v] = sz;
+	}
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>centroid_decomposition</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>My own centroid decomposition, inspired by Soroush</description>
+</snippet>

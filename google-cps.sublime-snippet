@@ -1,0 +1,70 @@
+<snippet>
+	<content><![CDATA[
+/*
+++[---------->+<]>.-[------>+<]>-.++++++++.+++++.-[->+++++<]>-.-[--->++<]>--.+.[--->+<]>---.[->+++<]>++.++++++.-------.++++++.--[--->+<]>.-[->+++<]>-..+++++++++++++.[----->++<]>.------------.+[----->+<]>.--------.+++++++++++++.-------------.--[--->+<]>-.---[->++++<]>-.++++[->+++<]>.--[--->+<]>-.[->+++<]>++.-.+++.---.-[->+++<]>.-[--->++<]>+.++++.------.[--->+<]>---.+[----->+<]>.------------.+++++++.-------.--[--->+<]>---.+++[->+++<]>++..+++++++++.---------.-[->+++<]>.+[----->+<]>+.-------------.+++++++.+.----[->+++<]>-.
+*/
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef long long big;
+typedef long double ludo;
+#define pbb pair<big, big>
+#define pii pair<int, int>
+#define fe first
+#define se second
+#define maxheap priority_queue
+#define mset multiset
+#define uset unordered_set
+#define umap unordered_map
+#define fr(i, s, e) for(int i = s; i < e; i++)
+#define revfr(i, s, e) for(int i = s - 1; i >= e; i--)
+#define getv(v, n) for(int i = 0; i < n; i++) cin >> v[i];
+#define speed ios_base::sync_with_stdio(false); cin.tie(NULL)
+#define nl "\n"
+
+// #define debug(text) if(do_debug) {cout << (#text) << ": " << text << endl;}
+#ifdef naman1601
+#define debug(text) cout << (#text) << ": " << text << endl;
+#else
+#define debug(text)
+#endif
+
+// making some things easily accessible
+// push_back pop_back emplace_back make_pair lower_bound upper_bound reserve resize reverse
+
+const big mod = 1000000007;
+// const big mod = 998244353;
+const big infinity = 1000000000000000000;
+const int inf = 1e9 + 5;
+bool do_debug = false;
+
+
+void solve() {
+
+	${1:}
+}
+
+
+int main() {
+	
+	speed;
+
+	int q = 1;
+	cin >> q;
+	int t = 1;
+
+	while(q-- > 0) {
+
+		cout << "Case #" << t++ << ": ";
+		solve();
+	}
+
+	return 0;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>google</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Naman's Competitive Programming snippet for Google contests</description>
+</snippet>

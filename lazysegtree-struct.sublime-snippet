@@ -1,0 +1,170 @@
+<snippet>
+	<content><![CDATA[
+struct lazyt {
+	
+	int tl;
+	vector<${1:big}> t;
+	vector<${1:big}> lazy;
+	vector<int> pending_assign;
+
+
+	lazyt(int l, ${1:big} val) {
+
+		tl = l;
+		t = vector<${1:big}>(tl << 2, val);
+		lazy = vector<${1:big}>(tl << 2, 0);
+		pending_assign = vector<int>(tl << 2, 0);
+	}
+
+
+	${1:big} task(${1:big} child1, ${1:big} child2) {
+	 
+		return ${2:child1 + child2};
+	}
+	 
+	 
+	void push(int node, int l, int r) {
+	 
+		int child1 = node << 1;
+		int child2 = (node << 1) + 1;
+		int mid = (l + r) >> 1;
+	 
+		lazy[child1] += lazy[node];
+		lazy[child2] += lazy[node];
+		t[child1] += (mid - l + 1) * lazy[node];
+		t[child2] += (r - mid) * lazy[node];
+		lazy[node] = 0;
+
+		if(pending_assign[node]) {
+
+			pending_assign[child1] = 1;
+			pending_assign[child2] = 1;
+			t[child1] = (t[node] / (r - l + 1)) * (mid - l + 1);
+			t[child2] = (t[node] / (r - l + 1)) * (r - mid);
+			pending_assign[node] = 0;
+		}
+	}
+	 
+	 
+	void range_assign(int node, int l, int r, int lq, int rq, ${1:big} val) {
+	 
+		if(lq > rq) {
+	 
+			return;
+		}
+	 
+		if(l == lq && r == rq) {
+
+			if(l != r) {
+
+				push(node, l, r);
+			}
+	 
+			lazy[node] = 0;
+			t[node] = (r - l + 1) * val;
+			pending_assign[node] = 1;
+	 
+		} else {
+	 
+			push(node, l, r);
+	 
+			int mid = (l + r) >> 1;
+			range_assign(node << 1, l, mid, lq, min(mid, rq), val);
+			range_assign((node << 1) + 1, mid + 1, r, max(mid + 1, lq), rq, val);
+	 
+			t[node] = task(t[node << 1], t[(node << 1) + 1]);
+		}
+	}
+
+	void range_assign(int lq, int rq, ${1:big} val) {
+
+		range_assign(1, 0, tl - 1, lq, rq, val);
+	}
+	 
+	 
+	void range_add(int node, int l, int r, int lq, int rq, ${1:big} val) {
+	 
+		if(lq > rq) {
+	 
+			return;
+		}
+	 
+		if(l == lq && r == rq) {
+
+			if(l != r) {
+
+				push(node, l, r);
+			}
+	 
+			lazy[node] += val;
+			t[node] += (r - l + 1) * val;
+	 
+		} else {
+	 
+			push(node, l, r);
+	 
+			int mid = (l + r) >> 1;
+			range_add(node << 1, l, mid, lq, min(mid, rq), val);
+			range_add((node << 1) + 1, mid + 1, r, max(mid + 1, lq), rq, val);
+	 
+			t[node] = task(t[node << 1], t[(node << 1) + 1]);
+		}
+	}
+
+	void range_add(int lq, int rq, ${1:big} val) {
+
+		range_add(1, 0, tl - 1, lq, rq, val);
+	}
+	 
+	 
+	${1:big} query(int node, int l, int r, int lq, int rq) {
+	 
+		if(lq > rq) {
+	 
+			return ${3:0};
+	 
+		} else if(lq <= l && rq >= r) {
+	 
+			return t[node];
+	 
+		} else {
+	 
+			push(node, l, r);
+			int mid = (l + r) >> 1;
+			return task(query(node << 1, l, mid, lq, min(rq, mid)), query((node << 1) + 1, mid + 1, r, max(lq, mid + 1), rq));
+		}
+	}
+
+	${1:big} query(int lq, int rq) {
+
+		return query(1, 0, tl - 1, lq, rq);
+	}
+	 
+	 
+	void build(vector<${1:big}>& v, int node, int l, int r) {
+	 
+		if(l == r) {
+	 
+			t[node] = v[l];
+	 
+		} else {
+	 
+			int mid = (l + r) >> 1;
+			build(v, node << 1, l, mid);
+			build(v, (node << 1) + 1, mid + 1, r);
+			t[node] = task(t[node << 1], t[(node << 1) + 1]);
+		}
+	}
+
+	void build(vector<${1:big}>& v) {
+
+		build(v, 1, 0, tl - 1);
+	}
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>lazysegt_struct</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Lazy segment tree for range additions, range assignments and range queries</description>
+</snippet>

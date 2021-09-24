@@ -1,0 +1,123 @@
+<snippet>
+	<content><![CDATA[
+template <typename T> ostream& operator<<(ostream& os, vector<T>& v) {
+	
+	for(auto element : v) {
+
+		os << element << " ";
+	}
+
+	return os;
+}
+
+template <typename T, typename S> ostream& operator<<(ostream& os, pair<T, S>& p) {
+	
+	os << "(" << p.first << ", " << p.second << ")";
+	return os;
+}
+
+template <typename T> ostream& operator<<(ostream& os, set<T>& v) {
+
+	if(v.size() == 0) {
+
+		os << "empty set\n";
+		return os;
+	}
+
+	auto endit = v.end();
+	endit--;
+
+	os << "[";
+	
+	for(auto it = v.begin(); it != v.end(); it++) {
+
+		os << *it;
+
+		if(it != endit) {
+
+			os << ", ";
+		}
+	}
+
+	os << "]";
+
+	return os;
+}
+
+template <typename T> ostream& operator<<(ostream& os, multiset<T>& v) {
+
+	if(v.size() == 0) {
+
+		os << "empty multiset\n";
+		return os;
+	}
+
+	auto endit = v.end();
+	endit--;
+
+	os << "[";
+	
+	for(auto it = v.begin(); it != v.end(); it++) {
+
+		os << *it;
+
+		if(it != endit) {
+
+			os << ", ";
+		}
+	}
+
+	os << "]";
+
+	return os;
+}
+
+template <typename T, typename S> ostream& operator<<(ostream& os, map<T, S>& v) {
+
+	if(v.size() == 0) {
+
+		os << "empty map\n";
+		return os;
+	}
+	
+	auto endit = v.end();
+	endit--;
+
+	os << "{";
+	
+	for(auto it = v.begin(); it != v.end(); it++) {
+
+		os << "(" << (*it).first << " : " << (*it).second << ")";
+
+		if(it != endit) {
+
+			os << ", ";
+		}
+	}
+
+	os << "}";
+
+	return os;
+}
+
+template <typename T> ostream& operator<<(ostream& os, vector<vector<T>>& v) {
+	
+	for(auto& subv : v) {
+
+		for(auto& e : subv) {
+
+			os << e << " ";
+		}
+
+		os << "\n";
+	}
+
+	return os;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>cptemp</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Naman's custom C++ templates for debugging in Competitive Programming.</description>
+</snippet>

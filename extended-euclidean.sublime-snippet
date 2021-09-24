@@ -1,0 +1,27 @@
+<snippet>
+	<content><![CDATA[
+long long extended_euclidean(long long a, long long b, long long& x, long long& y) {
+
+	// a and b are the numbers we want the GCD of, and x and y are Bezout's coefficients
+	// Bezout's identitiy: ax + by = gcd(a, b)
+
+	if(b == 0) {
+
+		x = 1;
+		y = 0;
+		return a;
+	}
+
+	long long X, Y;
+	long long G = extended_euclidean(b, a % b, X, Y);
+	x = Y;
+	y = X - (Y * (a / b));
+	return G;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>extended_eculidean_gcd</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Extended Eculidean algorithm which for GCD and Bezout's coefficients</description>>
+</snippet>

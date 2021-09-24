@@ -1,0 +1,32 @@
+<snippet>
+	<content><![CDATA[
+void z_algorithm(vector<int>& z, string s, int len) {
+ 
+	int l = 0, r = 0;
+ 
+	fr(i, 1, len) {
+ 
+		if(i <= r) {
+ 
+			z[i] = min(r - i + 1, z[i - l]);
+		}
+ 
+		while(i + z[i] < len && s[z[i]] == s[i + z[i]]) {
+ 
+			z[i]++;
+		}
+ 
+		if(z[i] + i - 1 > r) {
+ 
+			l = i;
+			r = z[i] + i - 1;
+		}
+	}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>z_algo</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Z-algorithm (strings)</description>>
+</snippet>

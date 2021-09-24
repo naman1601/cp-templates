@@ -1,0 +1,41 @@
+<snippet>
+	<content><![CDATA[
+vector<int> temp_mapper, mapper;
+
+${1:}int get_index(int value) {
+
+	${1:}return lower_bound(mapper.begin(), mapper.end(), value) - mapper.begin();
+${1:}}
+
+int coordinate_compression(vector<int>& v, int len) {
+
+	temp_mapper.reserve(len);
+	mapper.reserve(len);
+
+	fr(i, 0, len) {
+
+		temp_mapper.push_back(v[i]);
+	}
+
+	sort(temp_mapper.begin(), temp_mapper.end());
+	mapper.push_back(temp_mapper[0]);
+
+	fr(i, 1, len) {
+
+		if(temp_mapper[i] != temp_mapper[i - 1]) mapper.push_back(temp_mapper[i]);
+	}
+
+	${1:}// fr(i, 0, len) {
+
+	${1:}// 	v[i] = lower_bound(mapper.begin(), mapper.end(), v[i]) - mapper.begin();
+	${1:}// }
+
+	return mapper.size();
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>coordinate_compression</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Naman's coordinate compression snippet.</description>
+</snippet>

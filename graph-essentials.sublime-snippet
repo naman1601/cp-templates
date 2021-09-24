@@ -1,0 +1,25 @@
+<snippet>
+	<content><![CDATA[
+const int maxn = 2e5 + 5;
+int n_nodes, n_edges;
+vector<int> adj[maxn];
+// int depth[maxn];
+// vector<int> rev[maxn];
+// vector<int> path;
+
+void dfs(int node, int parent) {
+
+	for(int next : adj[node]) {
+
+		if(next == parent) continue;
+
+		dfs(next, node);
+	}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>graph</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Naman's graph essentials</description>
+</snippet>

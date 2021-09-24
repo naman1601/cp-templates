@@ -1,0 +1,87 @@
+<snippet>
+	<content><![CDATA[
+struct sparse_table {
+
+	int n, jump;
+	vector<vector<int>> parent_table;
+	vector<vector<int>> rangequery;
+	vector<int> logtable;
+
+	void init(int N, int JUMP) {
+
+		n = N;
+		jump = JUMP;
+		parent_table = vector<vector<int>>(n, vector<int>(jump, -1));
+		rangequery = vector<vector<int>>(n, vector<int>(jump, 0));
+		logtable = vector<int>(n + 1, 0);
+
+		fr(i, 2, n + 1) {
+
+			logtable[i] = logtable[i >> 1] + 1;
+		}
+	}
+
+	void add_node(int v, int p) {
+
+		parent_table[v][0] = v;
+		parent_table[v][1] = p;
+		rangequery[v][0] = vals[v];
+		rangequery[v][1] = vals[v] + vals[p];
+	}
+
+	void build() {
+
+		fr(j, 2, jump) {
+
+			fr(v, 0, n) {
+
+				if(parent_table[v][j - 1] != -1 && parent_table[parent_table[v][j - 1]][1] != -1) {
+
+					parent_table[v][j] = parent_table[parent_table[parent_table[v][j - 1]][1]][j - 1];
+					rangequery[v][j] = rangequery[v][j - 1] + rangequery[parent_table[parent_table[v][j - 1]][1]][j - 1];
+
+				} else {
+
+					parent_table[v][j] = -1;
+					rangequery[v][j] = 0;
+				}
+			}
+		}
+	}
+
+	int lift(int v, int dist) {
+
+		if(dist == 1) {
+
+			return rangequery[v][0];
+		}
+
+		int opt = logtable[dist];
+
+		if((1 << opt) == dist) {
+
+			return rangequery[v][opt];
+		}
+		
+		// int opt = 0;
+
+		// fr(j, 0, jump) {
+
+		// 	if((1 << j) > dist) {
+
+		// 		break;
+		// 	}
+
+		// 	opt = j;
+		// }
+
+		return rangequery[v][opt] + lift(parent_table[parent_table[v][opt]][1], dist - (1 << opt));
+	}
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>sparse_table</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Sparse Table for sum etc. in logartihmic time</description>
+</snippet>

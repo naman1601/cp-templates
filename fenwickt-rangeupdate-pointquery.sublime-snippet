@@ -1,0 +1,60 @@
+<snippet>
+	<content><![CDATA[
+struct fenwickt {
+
+	// this fenwick tree supports only range updates and point queries
+	// can also be modified to support point updates and range queries
+	// but not both simultaneously
+
+	int tl;
+	vector<${1:big}> t;
+
+	fenwickt(int len, ${1:big} val) {
+
+		tl = len;
+		t = vector<${1:big}>(tl, val);
+	}
+
+	void update(int index, ${1:big} val) {
+
+		for(; index < tl; index = index | (index + 1)) {
+
+			t[index] += val;
+		}
+	}
+
+	void range_update(int l, int r, ${1:big} val) {
+
+		update(l, val);
+		update(r + 1, -val);
+	}
+
+	${1:big} point_query(int index) {
+
+		${1:big} rv = 0;
+
+		for(; index >= 0; index = (index & (index + 1)) - 1) {
+
+			rv += t[index];
+		}
+
+		return rv;
+	}
+
+	void point_update(int index, ${1:big} val) {
+
+		update(index, val);
+	}
+
+	${1:big} range_query(int l, int r) {
+
+		return point_query(r) - point_query(l - 1);
+	}
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>fenwickt</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Naman's Fenwick Tree for range updates and point queries.</description>
+</snippet>

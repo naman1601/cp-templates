@@ -1,0 +1,78 @@
+<snippet>
+	<content><![CDATA[
+pbb pair_subtract(pbb a, pbb b) {
+
+	return make_pair(a.fe - b.fe, a.se - b.se);
+}
+
+
+big cross(pii a, pii b) {
+
+	return (a.fe * b.se) - (b.fe * a.se);
+}
+
+
+big cross(pii a, pii b, pii c) {
+
+	return cross(pair_subtract(a, c), pair_subtract(b, c));
+}
+
+
+big dist_square(pbb p) {
+
+	return p.fe * p.fe + p.se * p.se;
+}
+
+
+vector<int> convex_hull(vector<pbb>& pts) {
+
+	int n = pts.size();
+	int pivot_idx = min_element(pts.begin(), pts.end()) - pts.begin();
+	vector<int> candidates;
+	vector<int> hull;
+	hull.push_back(pivot_idx);
+
+	fr(i, 0, n) {
+
+		if(pts[i] != pts[pivot_idx]) {
+
+			candidates.push_back(i);
+		}
+	}
+
+	sort(candidates.begin(), candidates.end(), [&](int i, int j) {
+
+		pbb x = pair_subtract(pts[i], pts[pivot_idx]);
+		pbb y = pair_subtract(pts[j], pts[pivot_idx]);
+
+		big cross_product = cross(x, y);
+
+		if(cross_product != 0) {
+
+			return cross_product > 0;
+
+		} else {
+
+			return dist_square(x) < dist_square(y);
+		}
+	});
+
+	for(int i : candidates) {
+
+		while(((int)hull.size() > 1) && (cross(pts[hull[hull.size() - 2]], pts[hull.back()], pts[i]) <= 0)) {
+
+			hull.pop_back();
+		}
+
+		hull.push_back(i);
+	}
+
+	return hull;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>convexhull</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Convex Hull of points</description>
+</snippet>

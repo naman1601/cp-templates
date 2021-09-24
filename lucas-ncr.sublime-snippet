@@ -1,0 +1,49 @@
+<snippet>
+	<content><![CDATA[
+int lucas(int n, int r, int p) {
+
+	if(n < r) {
+
+		return 0;
+	}
+
+	if(r == 0 || r == n) {
+
+		return 1;
+	}
+
+	if(r == 1 || r == n - 1) {
+
+		return n % p;
+	}
+
+
+	int v = 1;
+
+	while(v <= n) {
+
+		v *= p;
+	}
+
+	v /= p;
+
+	int retval = 1;
+
+	while(v) {
+
+		retval *= lucas(n / v, r / v, p);
+		retval %= p;
+		n %= v;
+		r %= v;
+		v /= p;
+	}
+
+	return retval;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>lucas_ncr</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>nCr modulo p using Lucas' theorem</description>
+</snippet>

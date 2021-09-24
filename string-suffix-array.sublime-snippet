@@ -1,0 +1,151 @@
+<snippet>
+	<content><![CDATA[
+vector<int> get_lcp(string text, vector<int>& suffix_array) {
+
+	int len = text.length();
+	int n = (int)suffix_array.size();
+	vector<int> inverse_permutation(len);
+	vector<int> lcp(n - 1, 0);
+
+	fr(i, 1, n) {
+
+		inverse_permutation[suffix_array[i]] = i;
+	}
+
+	int k = 0;
+	lcp[0] = 0;
+
+	fr(i, 0, len) {
+
+		int idx = inverse_permutation[i];
+
+		if(idx == n - 1) {
+
+			k = 0;
+			continue;
+		}
+
+		int j = suffix_array[idx + 1];
+
+		while(i + k < len && j + k < len && text[i + k] == text[j + k]) {
+
+			k++;
+		}
+
+		lcp[idx] = k;
+		k = max(0, k - 1);
+	}
+
+	return lcp;
+}
+
+
+vector<int> get_suffix_array(string text) {
+
+	text += '\$';
+	int len = text.length();
+	int k = 1;
+
+	while((1 << k) < len) {
+
+		k++;
+	}
+
+	vector<array<int, 3>> numrep;
+	numrep.reserve(len);
+	vector<int> eq(len);
+
+	fr(i, 0, len) {
+
+		numrep.push_back({text[i], 0, i});
+	}
+
+	sort(numrep.begin(), numrep.end());
+	eq[numrep[0][2]] = 0;
+
+	fr(i, 1, len) {
+
+		if(numrep[i - 1][0] == numrep[i][0] && numrep[i - 1][1] == numrep[i][1]) {
+
+			eq[numrep[i][2]] = eq[numrep[i - 1][2]];
+
+		} else {
+
+			eq[numrep[i][2]] = eq[numrep[i - 1][2]] + 1;
+		}
+	}
+
+
+	vector<int> counts(len, 0), pointers(len, 0);
+	vector<array<int, 3>> aux(len);
+	aux = numrep;
+
+	fr(j, 1, k + 1) {
+
+		int d = (1 << (j - 1));
+		numrep.clear();
+		numrep.reserve(len);
+
+		fr(i, 0, len) {
+
+			counts[i] = 0;
+			pointers[i] = 0;
+		}
+
+		fr(i, 0, len) {
+
+			int si = aux[i][2];
+			int fi = si - d;
+
+			if(fi < 0) {
+
+				fi += len;
+			}
+
+			numrep.push_back({eq[fi], eq[si], fi});
+			counts[eq[fi]]++;
+		}
+
+		fr(i, 1, len) {
+
+			pointers[i] = pointers[i - 1] + counts[i - 1];
+		}
+
+		fr(i, 0, len) {
+
+			auto e = numrep[i];
+			aux[pointers[e[0]]++] = e;
+		}
+
+		eq[aux[0][2]] = 0;
+
+		fr(i, 1, len) {
+
+			if(aux[i - 1][0] == aux[i][0] && aux[i - 1][1] == aux[i][1]) {
+
+				eq[aux[i][2]] = eq[aux[i - 1][2]];
+
+			} else {
+
+				eq[aux[i][2]] = eq[aux[i - 1][2]] + 1;
+			}
+		}
+	}
+
+	vector<int> suffix_array;
+	suffix_array.reserve(len);
+
+	fr(i, 0, len) {
+
+		suffix_array.push_back(aux[i][2]);
+	}
+
+	return suffix_array;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>suffix_array</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>String suffix array</description>
+</snippet>

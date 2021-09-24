@@ -1,0 +1,162 @@
+<snippet>
+	<content><![CDATA[
+struct lazyt {
+	
+	int tl;
+	vector<big> t;
+	vector<big> lazy;
+	vector<big> mul;
+
+
+	lazyt(int l, big val) {
+
+		tl = l;
+		t = vector<big>(tl << 2, val);
+		lazy = vector<big>(tl << 2, 0);
+		mul = vector<big>(tl << 2, 1);
+	}
+
+
+	big task(big child1, big child2) {
+	 
+		return child1 + child2;
+	}
+	 
+	 
+	void push(vector<big>& segment_tree, int node, int l, int r) {
+	 
+		int child1 = node << 1;
+		int child2 = (node << 1) + 1;
+		int mid = (l + r) >> 1;
+
+		mul[child1] *= mul[node];
+		mul[child2] *= mul[node];
+		lazy[child1] *= mul[node];
+		lazy[child2] *= mul[node];
+		segment_tree[child1] *= mul[node];
+		segment_tree[child2] *= mul[node];
+		mul[node] = 1;
+	 
+		lazy[child1] += lazy[node];
+		lazy[child2] += lazy[node];
+		segment_tree[child1] += (mid - l + 1) * lazy[node];
+		segment_tree[child2] += (r - mid) * lazy[node];
+		lazy[node] = 0;
+	}
+	 
+	 
+	void multiply(vector<big>& segment_tree, int node, int l, int r, int lq, int rq, big val) {
+	 
+		if(lq > rq) {
+	 
+			return;
+		}
+	 
+		if(l == lq && r == rq) {
+
+			if(l != r) push(segment_tree, node, l, r);
+	 
+			segment_tree[node] *= val;
+			mul[node] *= val;
+	 
+		} else {
+	 
+			push(segment_tree, node, l, r);
+	 
+			int mid = (l + r) >> 1;
+			multiply(segment_tree, node << 1, l, mid, lq, min(mid, rq), val);
+			multiply(segment_tree, (node << 1) + 1, mid + 1, r, max(mid + 1, lq), rq, val);
+	 
+			segment_tree[node] = task(segment_tree[node << 1], segment_tree[(node << 1) + 1]);
+		}
+	}
+
+	void multiply(int lq, int rq, big val) {
+
+		multiply(t, 1, 0, tl - 1, lq, rq, val);
+	}
+	 
+	 
+	void add(vector<big>& segment_tree, int node, int l, int r, int lq, int rq, big val) {
+	 
+		if(lq > rq) {
+	 
+			return;
+		}
+	 
+		if(l == lq && r == rq) {
+
+			if(l != r) push(segment_tree, node, l, r);
+	 
+			lazy[node] += val;
+			segment_tree[node] += (r - l + 1) * val;
+	 
+		} else {
+	 
+			push(segment_tree, node, l, r);
+	 
+			int mid = (l + r) >> 1;
+			add(segment_tree, node << 1, l, mid, lq, min(mid, rq), val);
+			add(segment_tree, (node << 1) + 1, mid + 1, r, max(mid + 1, lq), rq, val);
+	 
+			segment_tree[node] = task(segment_tree[node << 1], segment_tree[(node << 1) + 1]);
+		}
+	}
+
+	void add(int lq, int rq, big val) {
+
+		add(t, 1, 0, tl - 1, lq, rq, val);
+	}
+	 
+	 
+	big query(vector<big>& segment_tree, int node, int l, int r, int lq, int rq) {
+	 
+		if(lq > rq) {
+	 
+			return 0;
+	 
+		} else if(lq <= l && rq >= r) {
+	 
+			return segment_tree[node];
+	 
+		} else {
+	 
+			push(segment_tree, node, l, r);
+			int mid = (l + r) >> 1;
+			return task(query(segment_tree, node << 1, l, mid, lq, min(rq, mid)), query(segment_tree, (node << 1) + 1, mid + 1, r, max(lq, mid + 1), rq));
+		}
+	}
+
+	big query(int lq, int rq) {
+
+		return query(t, 1, 0, tl - 1, lq, rq);
+	}
+	 
+	 
+	void build(vector<big>& segment_tree, vector<big>& v, int node, int l, int r) {
+	 
+		if(l == r) {
+	 
+			segment_tree[node] = v[l];
+	 
+		} else {
+	 
+			int mid = (l + r) >> 1;
+			build(segment_tree, v, node << 1, l, mid);
+			build(segment_tree, v, (node << 1) + 1, mid + 1, r);
+			segment_tree[node] = task(segment_tree[node << 1], segment_tree[(node << 1) + 1]);
+		}
+	}
+
+	void build(vector<big>& v) {
+
+		build(t, v, 1, 0, tl - 1);
+	}
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>lazy_mul_t</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c+=</scope>
+	<description>Lazy segment tree which allows range multiplication updates</description>
+</snippet>

@@ -1,0 +1,64 @@
+<snippet>
+	<content><![CDATA[
+vector<big> factorials;
+vector<big> mmi;
+
+big modular_multiplicative_inverse(big n, big m) {
+
+	big retval = 1;
+	big M = m - 2;
+
+	while(M > 0) {
+
+		if(M & 1) {
+
+			retval = ((retval % m) * (n % m)) % m;
+		}
+
+		M = M >> 1;
+		n = ((n % m) * (n % m)) % m;
+	}
+
+	return retval % m;
+}
+
+void precompute_factorials(big maxnum) {
+	
+	factorials = vector<big>(maxnum);
+	mmi = vector<big>(maxnum);
+	factorials[0] = 1;
+	factorials[1] = 1;
+	mmi[0] = 1;
+	mmi[1] = 1;
+
+	for(int i = 2; i < maxnum; i++) {
+
+		factorials[i] = (factorials[i - 1] * i) % mod;
+		mmi[i] = modular_multiplicative_inverse(factorials[i], mod);
+	}
+
+	// faster mmi calculation, only useful where mmi[i] denotes
+	// the modular multiplicative inverse of the FACTORIAL of i
+
+	// mmi[maxnum - 1] = modular_multiplicative_inverse(factorials[maxnum - 1], mod);
+
+	// revfr(i, maxnum - 1, 2) {
+
+		// mmi[i] = (mmi[i + 1] * (i + 1)) % mod;
+	// }
+
+
+	// faster mmi calculation, only when mmi[i] denotes
+	// the modular multiplicative inverse of i
+
+	// fr(i, 2, maxnum) {
+
+		// mmi[i] = mod - (mod / i) * mmi[mod % i] % mod;
+	// }
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>precompute_factorials</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>

@@ -1,0 +1,43 @@
+<snippet>
+	<content><![CDATA[
+big shortest_path[maxn];
+// vector<big> shortest_path;
+
+void dijkstra() {
+
+	// shortest_path.clear();
+	// shortest_path.resize(n_nodes);
+
+	fr(i, 0, n_nodes - 1) shortest_path[i] = infinity;
+	shortest_path[0] = 0;
+
+	maxheap<pbb> pq;
+	pq.push(make_pair(0, 0));
+
+	while(!pq.empty()) {
+
+		int node = pq.top().se;
+		big d = -pq.top().fe;
+		pq.pop();
+
+		if(d > shortest_path[node]) continue;
+
+		for(int next : adj[node]) {
+
+			big w;
+
+			if(d + w < shortest_path[next]) {
+
+				shortest_path[next] = d + w;
+				pq.push(make_pair(-shortest_path[next], next));
+			}
+		}
+	}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>dijkstra_algorithm</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Naman's Dijkstra Implementation</description>
+</snippet>

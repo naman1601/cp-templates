@@ -1,0 +1,75 @@
+<snippet>
+	<content><![CDATA[
+struct binlift {
+
+	int n, jump;
+	vector<vector<int>> parent_table;
+	vector<int> logtable;
+
+	void init(int N, int JUMP) {
+
+		n = N;
+		jump = JUMP;
+		parent_table = vector<vector<int>>(n, vector<int>(jump));
+		logtable = vector<int>(n + 1, 0);
+
+		fr(i, 2, n + 1) {
+
+			logtable[i] = logtable[i >> 1] + 1;
+		}
+	}
+
+	void add_node(int v, int p) {
+
+		parent_table[v][0] = p;
+	}
+
+	void build() {
+
+		fr(j, 1, jump) {
+
+			fr(v, 0, n) {
+
+				if(parent_table[v][j - 1] != -1) {
+
+					parent_table[v][j] = parent_table[parent_table[v][j - 1]][j - 1];
+
+				} else {
+
+					parent_table[v][j] = -1;
+				}
+			}
+		}
+	}
+
+	int lift_ancestor(int v, int dist) {
+
+		if(dist == 0) {
+
+			return v;
+		}
+
+		int opt = logtable[dist];
+		
+		// int opt = 0;
+
+		// fr(j, 0, jump) {
+
+		// 	if((1 << j) > dist) {
+
+		// 		break;
+		// 	}
+
+		// 	opt = j;
+		// }
+
+		return lift_ancestor(parent_table[v][opt], dist - (1 << opt));
+	}
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>binarylifting_struct</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Struct for Binary Lifting on trees</description>
+</snippet>

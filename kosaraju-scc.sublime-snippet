@@ -1,0 +1,70 @@
+<snippet>
+	<content><![CDATA[
+// const int maxn = 2e5 + 5;
+// vector<int> vtd;
+// vector<int> scc_of;
+vector<int> path;
+int vtd[maxn];
+int scc_of[maxn];
+int scc_id;
+
+void dfs1(int node) {
+
+	vtd[node] = 1;
+
+	for(int next : adj[node]) {
+
+		if(!vtd[next]) {
+
+			dfs1(next);
+		}
+	}
+
+	path.push_back(node);
+}
+
+void dfs2(int node) {
+
+	for(int next : rev[node]) {
+
+		if(!scc_of[next]) {
+
+			scc_of[next] = scc_of[node];
+			dfs2(next);
+		}
+	}
+}
+
+void kosaraju() {
+
+	scc_id = 0;
+
+	fr(i, 0, n_nodes) {
+
+		vtd[i] = 0;
+		scc_of[i] = 0;
+	}
+
+	fr(i, 0, n_nodes) {
+
+		if(!vtd[i]) dfs1(i);
+	}
+
+	reverse(path.begin(), path.end());
+
+	fr(i, 0, n_nodes) {
+
+		if(!scc_of[path[i]]) {
+
+			scc_of[path[i]] = ++scc_id;
+			dfs2(path[i]);
+		}
+	}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>kosaraju_scc</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Naman's implementation for Kosaraju's SCC algorithm</description>
+</snippet>

@@ -1,0 +1,48 @@
+<snippet>
+	<content><![CDATA[
+struct CRT {
+
+	using type = long long;
+	// using type = __int128;
+
+	type extended_euclid(type a, type b, type& x, type& y) {
+
+		if(b == 0) {
+
+			x = 1;
+			y = 0;
+			return a;
+		}
+
+		type X, Y;
+		type G = extended_euclid(b, a % b, X, Y);
+		x = Y;
+		y = X - (Y * (a / b));
+		return G;
+	}
+
+	pair<type, type> crt(type a1, type m1, type a2, type m2) {
+
+		type p, q;
+		type g = extended_euclid(m1, m2, p, q);
+
+		if(a1 % g != a2 % g) {
+
+			return make_pair(0, -1);
+		}
+
+		type m = m1 / g * m2;
+		p = (p % m + m) % m;
+		q = (q % m + m) % m;
+
+		type a = (((((p * a2) % m) * (m1 / g)) % m) + ((((q * a1) % m) * ((m2 / g) % m)) % m)) % m;
+		return make_pair(a, m);
+	}
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>crt</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Chinese Remainder Theorem</description>>
+</snippet>

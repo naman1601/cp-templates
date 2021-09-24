@@ -1,0 +1,105 @@
+<snippet>
+	<content><![CDATA[
+struct lca {
+
+	int n, tl;
+	vector<int> t;
+	vector<int> first;
+	vector<int> euler;
+	vector<int> dv;
+
+	lca(int N) {
+
+		n = N;
+		euler.clear();
+		euler.reserve(2 * n);
+		first.clear();
+		first.resize(n);
+		dv.clear();
+		dv.resize(n);
+
+		dv[0] = 0;
+		dfs(0, 0);
+
+		tl = euler.size();
+		t.clear();
+		t.resize(tl << 2, -1);
+		build(1, 0, tl - 1);
+	}
+
+	int get_lca(int u, int v) {
+
+		int l = first[u], r = first[v];
+		if(l > r) swap(l, r);
+		return query(1, 0, tl - 1, l, r);
+	}
+
+	void dfs(int node, int parent) {
+
+		first[node] = euler.size();
+		euler.push_back(node);
+
+		for(int next : adj[node]) {
+
+			if(next == parent) continue;
+
+			dv[next] = dv[node] + 1;
+			dfs(next, node);
+			euler.push_back(node);
+		}
+	}
+
+	int task(int child1, int child2) {
+
+		if(child1 == -1) return child2;
+		if(child2 == -1) return child1;
+
+		if(dv[child1] < dv[child2]) {
+
+			return child1;
+
+		} else {
+
+			return child2;
+		}
+	}
+
+	void build(int node, int l, int r) {
+	
+		if(l == r) {
+	
+			t[node] = euler[l];
+	
+		} else {
+	
+			int mid = (l + r) >> 1;
+			build(node << 1, l, mid);
+			build((node << 1) + 1, mid + 1, r);
+			t[node] = task(t[node << 1], t[(node << 1) + 1]);
+		}
+	}
+
+	int query(int node, int l, int r, int lq, int rq) {
+	
+		if(lq > rq) {
+	
+			return -1;
+	
+		} else if(lq <= l && rq >= r) {
+	
+			return t[node];
+	
+		} else {
+	
+			int mid = (l + r) >> 1;
+			return task(query(node << 1, l, mid, lq, min(rq, mid)), query((node << 1) + 1, mid + 1, r, max(lq, mid + 1), rq));
+		}
+	}
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>lca_struct</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Naman's LCA Struct</description>
+</snippet>

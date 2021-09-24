@@ -1,0 +1,62 @@
+<snippet>
+	<content><![CDATA[
+struct fenwickt {
+
+	// this fenwick tree supports range updates and range queries
+
+	int tl;
+	vector<${1:big}> t1;
+	vector<${1:big}> t2;
+
+	fenwickt(int len, ${1:big} val) {
+
+		tl = len;
+		t1 = vector<${1:big}>(tl, val);
+		t2 = vector<${1:big}>(tl, val);
+	}
+
+	void update(vector<${1:big}>& t, int index, ${1:big} val) {
+
+		for(; index < tl; index = index | (index + 1)) {
+
+			t[index] += val;
+		}
+	}
+
+	void range_update(int l, int r, ${1:big} val) {
+
+		update(t1, l, val);
+		update(t1, r + 1, -val);
+		update(t2, l, val * (l - 1));
+		update(t2, r + 1, -val * r);
+	}
+
+	${1:big} point_query(vector<${1:big}>& t, int index) {
+
+		${1:big} rv = 0;
+
+		for(; index >= 0; index = (index & (index + 1)) - 1) {
+
+			rv += t[index];
+		}
+
+		return rv;
+	}
+
+	${1:big} prefix_sum(int index) {
+
+		return point_query(t1, index) * index - point_query(t2, index);
+	}
+
+	${1:big} range_query(int l, int r) {
+
+		return prefix_sum(r) - prefix_sum(l - 1);
+	}
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>fenwickt_range</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Naman's Range Update-Query Fenwick Tree</description>
+</snippet>

@@ -1,0 +1,10 @@
+<snippet>
+	<content><![CDATA[
+sort(${1:}.begin(), ${1:}.end())
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>sort</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Naman's sort() snippet</description>
+</snippet>

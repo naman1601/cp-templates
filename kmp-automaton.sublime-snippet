@@ -1,0 +1,53 @@
+<snippet>
+	<content><![CDATA[
+void kmp_prefix_function(vector<int>& v, string s, int len) {
+
+	fr(i, 1, len) {
+
+		int j = v[i - 1];
+
+		while(j > 0 && s[i] != s[j]) {
+
+			j = v[j - 1];
+		}
+
+		if(s[i] == s[j]) {
+
+			j++;
+		}
+		
+		v[i] = j;
+	}
+}
+
+
+void compute_automaton(string s, vector<vector<int>>& automaton) {
+	
+	s = s + "#";
+	int n = s.length();
+
+	vector<int> pf(n, 0);
+	kmp_prefix_function(pf, s, n);
+
+	fr(i, 0, n) {
+
+		fr(c, 0, 26) {
+
+			if(i > 0 && ('a' + c) != s[i]) {
+
+				automaton[i][c] = automaton[pf[i - 1]][c];
+
+			} else {
+
+				automaton[i][c] = i + (('a' + c) == s[i]);
+			}
+		}
+	}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>kmp_automaton</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<descrption>KMP Automaton</descrption>
+</snippet>

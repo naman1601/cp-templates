@@ -1,0 +1,159 @@
+<snippet>
+	<content><![CDATA[
+struct suffix_array {
+
+	vector<int> sa, lcp;
+
+	suffix_array(string& text, int lim = 256) {
+
+		int len = text.length() + 1;
+		sa.resize(len);
+		lcp.resize(len - 1);
+
+		lim = max(lim, len);
+		vector<int> p(len), pn(len), eq(len), new_eq(len), cnt(lim);
+
+		// SUFFIX ARRAY CALCULATION STARTS
+
+		{
+
+			vector<int> val(len);
+
+			fr(i, 0, len - 1) {
+
+				val[i] = text[i];
+			}
+
+			val[len - 1] = 0;
+
+			fr(i, 0, lim) {
+
+				cnt[i] = 0;
+			}
+
+			fr(i, 0, len) {
+
+				cnt[val[i]]++;
+			}
+
+			fr(i, 1, lim) {
+
+				cnt[i] += cnt[i - 1];
+			}
+
+			revfr(i, len, 0) {
+
+				p[--cnt[val[i]]] = i;
+			}
+
+			eq[p[0]] = 0;
+
+			fr(i, 1, len) {
+
+				if(text[p[i]] == text[p[i - 1]]) {
+
+					eq[p[i]] = eq[p[i - 1]];
+
+				} else {
+
+					eq[p[i]] = eq[p[i - 1]] + 1;
+				}
+			}
+		}
+
+
+		for(int k = 0; (1 << k) < len; k++) {
+
+			int d = (1 << k);
+
+			fr(i, 0, lim) {
+
+				cnt[i] = 0;
+			}
+
+			fr(i, 0, len) {
+
+				pn[i] = p[i] - d;
+
+				if(pn[i] < 0) {
+
+					pn[i] += len;
+				}
+
+				cnt[eq[pn[i]]]++;
+			}
+
+			fr(i, 1, lim) {
+
+				cnt[i] += cnt[i - 1];
+			}
+
+			revfr(i, len, 0) {
+
+				p[--cnt[eq[pn[i]]]] = pn[i];
+			}
+
+			new_eq[p[0]] = 0;
+
+			fr(i, 1, len) {
+
+				pii cur = make_pair(eq[p[i]], eq[(p[i] + d) % len]);
+				pii prev = make_pair(eq[p[i - 1]], eq[(p[i - 1] + d) % len]);
+
+				if(cur == prev) {
+
+					new_eq[p[i]] = new_eq[p[i - 1]];
+
+				} else {
+
+					new_eq[p[i]] = new_eq[p[i - 1]] + 1;
+				}
+			}
+
+			eq.swap(new_eq);
+		}
+
+		fr(i, 0, len) {
+
+			sa[i] = p[i];
+		}
+
+		// SUFFIX ARRAY CALCULATION DONE
+
+
+		// LCP CALCULATION STARTS
+
+		int k = 0;
+		lcp[0] = 0;
+
+		fr(i, 0, len - 1) {
+
+			int idx = eq[i];
+
+			if(idx == len - 1) {
+
+				k = 0;
+				continue;
+			}
+
+			int j = sa[idx + 1];
+
+			while((i + k < len - 1) && (j + k < len - 1) && (text[i + k] == text[j + k])) {
+
+				k++;
+			}
+
+			lcp[idx] = k;
+			k = max(0, k - 1);
+		}
+
+		// LCP CALCULATION DONE
+	}	
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>suffix_array_struct</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Suffix Array and LCP Struct</description>
+</snippet>

@@ -1,0 +1,25 @@
+<snippet>
+	<content><![CDATA[
+g++ code.cpp -o code
+g++ other.cpp -o other
+
+for((i = 1; ; ++i)); do
+	python3 gen.py > tc.txt
+	./other < tc.txt > other_op.txt
+	./code < tc.txt > code_op.txt
+	diff -i other_op.txt code_op.txt > /dev/null || break  
+	echo "Passed test: "\$i
+
+done
+echo "WA on the following test:"
+cat tc.txt
+echo "Your answer is:"
+cat other_op.txt
+echo "Correct answer is:"
+cat code_op.txt
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>runsh</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

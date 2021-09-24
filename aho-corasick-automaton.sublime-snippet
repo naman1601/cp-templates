@@ -1,0 +1,122 @@
+<snippet>
+	<content><![CDATA[
+const int alphabet_size = 26;
+
+struct node {
+
+	int next[alphabet_size];
+	int automaton[alphabet_size];
+	int p = -1, suffix_link = -1, exit_link = -1, leaf = 0;
+	char edge_char;
+	// int idx = -1;
+	// vector<int> idcs;
+
+	node(int par = -1, char ch = '\$') : p(par), edge_char(ch) {
+
+		fr(i, 0, alphabet_size) {
+
+			next[i] = -1;
+			automaton[i] = -1;
+		}
+	}
+};
+
+vector<node> trie(1);
+
+void add(const string& s, int idx) {
+
+	int v = 0;
+
+	for(char ch : s) {
+
+		int c = ch - 'a';
+
+		if(trie[v].next[c] == -1) {
+
+			trie[v].next[c] = (int)trie.size();
+			trie.emplace_back(v, ch);
+		}
+
+		v = trie[v].next[c];
+	}
+
+	// trie[v].idx = idx;
+	// trie[v].idcs.push_back(idx);
+	trie[v].leaf = 1;
+}
+
+int get_automaton(int v, char ch);
+
+int get_suffix_link(int v) {
+
+	if(trie[v].suffix_link == -1) {
+
+		if(v == 0 || trie[v].p == 0) {
+
+			trie[v].suffix_link = 0;
+
+		} else {
+
+			trie[v].suffix_link = get_automaton(get_suffix_link(trie[v].p), trie[v].edge_char);
+		}
+	}
+
+	return trie[v].suffix_link;
+}
+
+int get_automaton(int v, char ch) {
+
+	int c = ch - 'a';
+
+	if(trie[v].automaton[c] == -1) {
+
+		if(trie[v].next[c] != -1) {
+
+			trie[v].automaton[c] = trie[v].next[c];
+
+		} else {
+
+			if(v == 0) {
+
+				trie[v].automaton[c] = 0;
+
+			} else {
+
+				trie[v].automaton[c] = get_automaton(get_suffix_link(v), ch);
+			}
+		}
+	}
+
+	return trie[v].automaton[c];
+}
+
+int get_exit_link(int v) {
+
+	if(trie[v].exit_link == -1) {
+
+		if(v == 0) {
+
+			return trie[v].exit_link = 0;
+
+		} else {
+
+			if(trie[get_suffix_link(v)].leaf || get_suffix_link(v) == 0) {
+
+				return trie[v].exit_link = get_suffix_link(v);
+
+			} else {
+
+				return trie[v].exit_link = get_exit_link(get_suffix_link(v));
+			}
+		}
+	}
+
+	return trie[v].exit_link;
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>aho_corasick_automaton</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Aho Corasick automaton</description>
+</snippet>

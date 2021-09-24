@@ -1,0 +1,105 @@
+<snippet>
+	<content><![CDATA[
+struct lazyt {
+
+	int tl;
+	vector<${1:big}> t;
+
+	lazyt(int l, ${1:big} val) {
+
+		tl = l;
+		t = vector<int>(tl << 2, val);
+	}
+
+	${1:big} task(${1:big} child1, ${1:big} child2) {
+	
+		return child1 + child2;
+	}
+	
+	void push(int node) {
+
+		int child1 = (node << 1);
+		int child2 = child1 + 1;
+		if(t[node] != -1) t[child1] = t[child2] = t[node];
+		t[node] = -1;
+	}
+
+	void update(int node, int l, int r, int lq, int rq, ${1:big} val) {
+	
+		if(lq > rq) {
+	
+			return;
+	
+		} else if(lq == l && rq == r) {
+		
+			if(l != r) push(node);
+			t[node] = val;
+	
+		} else {
+	
+			push(node);
+			int mid = (l + r) >> 1;
+			update(node << 1, l, mid, lq, min(mid, rq), val);
+			update((node << 1) + 1, mid + 1, r, max(mid + 1, lq), rq, val);
+		}
+	}
+
+	void update(int lq, int rq, ${1:big} val) {
+
+		update(1, 0, tl - 1, lq, rq, val);
+	}
+	
+	${1:big} query(int node, int l, int r, int pt) {
+	
+		if(l == r) {
+
+			return t[node];
+
+		} else {
+
+			push(node, l, r);
+			int mid = ((r - l) >> 1) + l;
+
+			if(mid >= pt) {
+
+				return query(node << 1, l, mid, pt);
+
+			} else {
+
+				return query((node << 1) + 1, mid + 1, r, pt);
+			}
+		}
+	}
+
+	${1:big} query(int pt) {
+
+		return query(1, 0, tl - 1, pt);
+	}
+	
+	void build(vector<${1:big}>& v, int node, int l, int r) {
+	
+		if(l == r) {
+	
+			t[node] = v[l];
+	
+		} else {
+	
+			int mid = (l + r) >> 1;
+			build(v, node << 1, l, mid);
+			build(v, (node << 1) + 1, mid + 1, r);
+			t[node] = task(t[node << 1], t[(node << 1) + 1]);
+		}
+	}
+
+	void build(vector<${1:big}>& v) {
+
+		build(v, 1, 0, tl - 1);
+	}
+};
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>lazysegt_rangeassign_pointquery</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Segment tree for range assign and point queries</description>>
+</snippet>

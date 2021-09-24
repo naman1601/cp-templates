@@ -1,0 +1,32 @@
+<snippet>
+	<content><![CDATA[
+void blaze_input(int &number) { 
+
+	bool negative = false; 
+	int c;
+	number = 0;
+	c = getchar_unlocked(); 
+
+	if (c == '-') {
+
+		negative = true; 
+	    c = getchar_unlocked(); 
+	} 
+
+	for(; (c > 47 && c < 58); c = getchar_unlocked()) {
+
+	    number = number *10 + c - 48; 
+	}
+
+	if(negative) {
+
+	    number *= -1; 
+	}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>blaze</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Function for fast integer input.</description>
+</snippet>

@@ -1,0 +1,17 @@
+<snippet>
+	<content><![CDATA[
+int l = ${1:}, r = ${2:};
+int opt = ${3:};
+
+while(l <= r) {
+
+	int mid = ((r - l) >> 1) + l;
+	${4:}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>binary_search</tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+	<description>Naman's Quick Binary Search</description>
+</snippet>
