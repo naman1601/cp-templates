@@ -3,17 +3,18 @@
 const int maxn = 2e5 + 5;
 int n_nodes, n_edges;
 vector<int> adj[maxn];
-// int depth[maxn];
 // vector<int> rev[maxn];
+// int depth[maxn];
+// int sz[maxn];
 // vector<int> path;
 
-void dfs(int node, int parent) {
+void dfs(int v, int p) {
 
-	for(int next : adj[node]) {
+	for(int u : adj[v]) {
 
-		if(next == parent) continue;
+		if(u == p) continue;
 
-		dfs(next, node);
+		dfs(u, v);
 	}
 }
 ]]></content>

@@ -8,7 +8,9 @@ ${1:}int get_index(int value) {
 ${1:}}
 
 int coordinate_compression(vector<int>& v, int len) {
-
+	
+	temp_mapper.clear();
+	mapper.clear();
 	temp_mapper.reserve(len);
 	mapper.reserve(len);
 
