@@ -1,0 +1,11 @@
+<snippet>
+	<content><![CDATA[
+for(int submask = mask; submask; submask = (submask - 1) & mask) {
+	
+	${1:}
+}
+]]></content>
+	<tabTrigger>submask_enumeration</tabTrigger>
+	<scope>source.c++</scope>
+	<description>Submask enumeration in N^3</description>
+</snippet>

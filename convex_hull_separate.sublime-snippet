@@ -1,0 +1,93 @@
+<snippet>
+	<content><![CDATA[
+struct pt {
+
+	big x, y;
+};
+
+bool cmp(pt a, pt b) {
+
+	return a.x < b.x || (a.x == b.x && a.y < b.y);
+}
+
+bool clockwise(pt a, pt b, pt c) {
+
+	return a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y) < 0;
+}
+
+bool counter_clockwise(pt a, pt b, pt c) {
+
+	return a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y) > 0;
+}
+
+vector<pt> get_convex_hull(vector<pt> points) {
+
+	if (points.size() == 1) {
+
+		return points;
+	}
+
+	sort(points.begin(), points.end(), &cmp);
+	
+	vector<pt> aux;
+	aux.push_back(points[0]);
+
+	for(int i = 1; i < (int)points.size(); i++) {
+
+		if(points[i].x != points[i - 1].x || points[i].y != points[i - 1].y) {
+
+			aux.push_back(points[i]);
+		}
+	}
+
+	swap(aux, points);
+	aux.clear();
+
+	pt p1 = points[0], p2 = points.back();
+
+	vector<pt> upper_hull, lower_hull;
+	upper_hull.push_back(p1);
+	lower_hull.push_back(p1);
+
+	for (int i = 1; i < (int)points.size(); i++) {
+
+		if (i == (int)points.size() - 1 || clockwise(p1, points[i], p2)) {
+
+			while (upper_hull.size() >= 2 && !clockwise(upper_hull[(int)upper_hull.size() - 2], upper_hull[(int)upper_hull.size() - 1], points[i])) {
+
+				upper_hull.pop_back();
+			}
+
+			upper_hull.push_back(points[i]);
+		}
+
+		if (i == (int)points.size() - 1 || counter_clockwise(p1, points[i], p2)) {
+
+			while(lower_hull.size() >= 2 && !counter_clockwise(lower_hull[(int)lower_hull.size() - 2], lower_hull[(int)lower_hull.size() - 1], points[i])) {
+
+				lower_hull.pop_back();
+			}
+
+			lower_hull.push_back(points[i]);
+		}
+	}
+
+	points.clear();
+
+	for (int i = 0; i < (int)upper_hull.size(); i++) {
+
+		points.push_back(upper_hull[i]);
+	}
+
+	for (int i = (int)lower_hull.size() - 2; i > 0; i--) {
+		
+		points.push_back(lower_hull[i]);
+	}
+
+	return points;
+}
+]]></content>
+	<tabTrigger>convex_hull_separate</tabTrigger>
+	<scope>source.c++</scope>
+	<description>Lower and Upper convex hulls separately</description>
+</snippet>
