@@ -1,0 +1,81 @@
+<snippet>
+	<content><![CDATA[
+struct two_sat {
+
+	int N;
+	vector<vector<int>> g, gt;
+	vector<int> path;
+	vector<int> vtd;
+	vector<int> scc_of;
+	int scc_id;
+
+	two_sat(int _N) : N(_N){
+
+		g.clear();
+		g.resize(N);
+		gt.clear();
+		gt.resize(N);
+	}
+
+	void add_edge(int v, int u) {
+
+		g[v].push_back(u);
+		gt[u].push_back(v);
+	}
+	
+	void dfs1(int node) {
+	
+		vtd[node] = 1;
+	
+		for(int next : g[node]) {
+	
+			if(!vtd[next]) {
+	
+				dfs1(next);
+			}
+		}
+	
+		path.push_back(node);
+	}
+	
+	void dfs2(int node) {
+	
+		for(int next : gt[node]) {
+	
+			if(!scc_of[next]) {
+	
+				scc_of[next] = scc_of[node];
+				dfs2(next);
+			}
+		}
+	}
+	
+	void kosaraju() {
+	
+		scc_id = 0;
+	
+		vtd.assign(N, 0);
+		scc_of.assign(N, 0);
+	
+		fr(i, 0, N) {
+	
+			if(!vtd[i]) dfs1(i);
+		}
+	
+		reverse(path.begin(), path.end());
+	
+		fr(i, 0, N) {
+	
+			if(!scc_of[path[i]]) {
+	
+				scc_of[path[i]] = ++scc_id;
+				dfs2(path[i]);
+			}
+		}
+	}
+};
+]]></content>
+	<tabTrigger>2sat</tabTrigger>
+	<scope>source.c++</scope>
+	<description>2-SAT struct</description>
+</snippet>
