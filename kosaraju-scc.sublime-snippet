@@ -1,12 +1,21 @@
 <snippet>
 	<content><![CDATA[
 // const int maxn = 2e5 + 5;
-// vector<int> vtd;
-// vector<int> scc_of;
+// int vtd[maxn];
+// int scc_of[maxn];
+// int n_nodes;
+// vector<vector<int>> adj;
+// vector<vector<int>> rev_adj;
+vector<int> vtd;
+vector<int> scc_of;
 vector<int> path;
-int vtd[maxn];
-int scc_of[maxn];
 int scc_id;
+
+void add_edge(int v, int u) {
+
+	adj[v].push_back(u);
+	rev_adj[u].push_back(v);
+}
 
 void dfs1(int node) {
 
@@ -25,9 +34,9 @@ void dfs1(int node) {
 
 void dfs2(int node) {
 
-	for(int next : rev[node]) {
+	for(int next : rev_adj[node]) {
 
-		if(!scc_of[next]) {
+		if(scc_of[next] == -1) {
 
 			scc_of[next] = scc_of[node];
 			dfs2(next);
@@ -38,12 +47,14 @@ void dfs2(int node) {
 void kosaraju() {
 
 	scc_id = 0;
+	scc_of.assign(n_nodes, -1);
+	vtd.assign(n_nodes, 0);
 
-	fr(i, 0, n_nodes) {
+	// fr(i, 0, n_nodes) {
 
-		vtd[i] = 0;
-		scc_of[i] = 0;
-	}
+	// 	vtd[i] = 0;
+	// 	scc_of[i] = -1;
+	// }
 
 	fr(i, 0, n_nodes) {
 
@@ -54,9 +65,9 @@ void kosaraju() {
 
 	fr(i, 0, n_nodes) {
 
-		if(!scc_of[path[i]]) {
+		if(scc_of[path[i]] == -1) {
 
-			scc_of[path[i]] = ++scc_id;
+			scc_of[path[i]] = scc_id++;
 			dfs2(path[i]);
 		}
 	}

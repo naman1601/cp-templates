@@ -1,8 +1,12 @@
 <snippet>
 	<content><![CDATA[
-const int maxn = 2e5 + 5;
+// const int maxn = 2e5 + 5;
 int n_nodes, n_edges;
-vector<int> adj[maxn];
+vector<vector<int>> adj;
+// vector<vector<int>> rev;
+// vector<vector<int>> depth;
+// vector<vector<int>> sz;
+// vector<int> adj[maxn];
 // vector<int> rev[maxn];
 // int depth[maxn];
 // int sz[maxn];
@@ -12,7 +16,10 @@ void dfs(int v, int p) {
 
 	for(int u : adj[v]) {
 
-		if(u == p) continue;
+		if(u == p) {
+
+			continue;
+		}
 
 		dfs(u, v);
 	}
