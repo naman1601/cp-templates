@@ -1,14 +1,14 @@
 <snippet>
 	<content><![CDATA[
-big shortest_path[maxn];
-// vector<big> shortest_path;
+// big shortest_path[maxn];
+vector<big> shortest_path;
 
 void dijkstra() {
 
-	// shortest_path.clear();
-	// shortest_path.resize(n_nodes);
+	shortest_path.assign(n_nodes, infinity);
 
-	fr(i, 0, n_nodes - 1) shortest_path[i] = infinity;
+	// fr(i, 0, n_nodes - 1) shortest_path[i] = infinity;
+	
 	shortest_path[0] = 0;
 
 	maxheap<pbb> pq;
