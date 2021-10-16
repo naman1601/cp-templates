@@ -8,7 +8,7 @@ struct hld_t {
 	void init(int l, ${1:big} val) {
 
 		tl = l;
-		t = vector<int>(tl << 2, val);
+		t = vector<${1:big}>(tl << 2, val);
 	}
 
 	${1:big} task(${1:big} child1, ${1:big} child2) {
@@ -66,12 +66,11 @@ struct hld_t {
 		return query(1, 0, tl - 1, lq, rq);
 	}
 	
-	void build(vector<${1:big}>& v, int node, int l, int r) {
+	void build(vector<int>& v, int node, int l, int r) {
 	
 		if(l == r) {
 	
 			t[node] = attribute[v[l]];
-
 			// replace attribute with appropriate variable
 	
 		} else {
@@ -83,7 +82,7 @@ struct hld_t {
 		}
 	}
 
-	void build(vector<${1:big}>& v) {
+	void build(vector<int>& v) {
 
 		build(v, 1, 0, tl - 1);
 	}
