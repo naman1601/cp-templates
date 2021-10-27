@@ -1,7 +1,7 @@
 <snippet>
 	<content><![CDATA[
-#pragma GCC optimize("Ofast,unroll-loops")
-#pragma GCC target("avx,avx2,sse,sse2")
+#pragma GCC optimize("O3,unroll-loops")
+#pragma GCC target("avx2")
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
 	<tabTrigger>pragme</tabTrigger>
