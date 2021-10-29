@@ -4,13 +4,22 @@
 int n_nodes, n_edges;
 vector<vector<int>> adj;
 // vector<vector<int>> rev;
-// vector<vector<int>> depth;
-// vector<vector<int>> sz;
+// vector<int> depth;
+// vector<int> sz;
 // vector<int> adj[maxn];
 // vector<int> rev[maxn];
 // int depth[maxn];
 // int sz[maxn];
 // vector<int> path;
+
+void graph_init() {
+	
+	adj.clear();
+	adj.resize(n_nodes);
+
+	// sz.assign(n_nodes, 0);
+	// depth.assign(n_nodes, 0);
+}
 
 void dfs(int v, int p) {
 
