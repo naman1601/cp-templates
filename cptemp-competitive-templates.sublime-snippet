@@ -1,5 +1,11 @@
 <snippet>
 	<content><![CDATA[
+template <typename T, typename S> ostream& operator<<(ostream& os, pair<T, S>& p) {
+	
+	os << "(" << p.first << ", " << p.second << ")";
+	return os;
+}
+
 template <typename T> ostream& operator<<(ostream& os, vector<T>& v) {
 	
 	for(auto element : v) {
@@ -7,12 +13,6 @@ template <typename T> ostream& operator<<(ostream& os, vector<T>& v) {
 		os << element << " ";
 	}
 
-	return os;
-}
-
-template <typename T, typename S> ostream& operator<<(ostream& os, pair<T, S>& p) {
-	
-	os << "(" << p.first << ", " << p.second << ")";
 	return os;
 }
 
