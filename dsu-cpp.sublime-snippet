@@ -5,16 +5,16 @@ vector<int> component_of;
 int component_control;
 int active_components;
 
-void dsu_init(int n) {
+void dsu_init(int N) {
 		
 	component_control = 0;
 	active_components = 0;
 	component_of.clear();
-	component_of.resize(n);
+	component_of.resize(N);
 	component.clear();
-	component.resize(n);
+	component.resize(N);
 
-	for(int i = 0; i < n; i++) {
+	for(int i = 0; i < N; i++) {
 
 		component_of[i] = i;
 		component[i].push_back(i);
@@ -24,50 +24,32 @@ void dsu_init(int n) {
 
 void dsu(int x, int y) {
 
-	if(component_of[x] == -1 && component_of[y] == -1) {
+	if(component_of[x] == component_of[y]) {
 
-		component.push_back({x, y});
-		component_of[x] = component_of[y] = component_control++;
-
-	} else if(component_of[x] == -1) {
-
-		component_of[x] = component_of[y];
-		component[component_of[x]].push_back(x);
-
-	} else if(component_of[y] == -1) {
-
-		component_of[y] = component_of[x];
-		component[component_of[y]].push_back(y);
-
-	} else {
-
-		if(component_of[x] == component_of[y]) {
-
-			return;
-		}
-
-		active_components--;
-		int sx = component[component_of[x]].size();
-		int sy = component[component_of[y]].size();
-
-		if(sx > sy) {
-
-			swap(x, y);
-		}
-
-		for(int node : component[component_of[x]]) {
-
-			if(node != x) {
-
-				component_of[node] = component_of[y];
-				component[component_of[y]].push_back(node);
-			}
-		}
-
-		component[component_of[y]].push_back(x);
-		component[component_of[x]].clear();
-		component_of[x] = component_of[y];
+		return;
 	}
+
+	active_components--;
+	int sx = component[component_of[x]].size();
+	int sy = component[component_of[y]].size();
+
+	if(sx > sy) {
+
+		swap(x, y);
+	}
+
+	for(int node : component[component_of[x]]) {
+
+		if(node != x) {
+
+			component_of[node] = component_of[y];
+			component[component_of[y]].push_back(node);
+		}
+	}
+
+	component[component_of[y]].push_back(x);
+	component[component_of[x]].clear();
+	component_of[x] = component_of[y];
 }
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
