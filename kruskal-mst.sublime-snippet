@@ -1,0 +1,88 @@
+<snippet>
+	<content><![CDATA[
+vector<vector<int>> component;
+vector<int> component_of;
+int component_control;
+int active_components;
+
+void mst_dsu_init(int N) {
+		
+	component_control = 0;
+	active_components = 0;
+	component_of.clear();
+	component_of.resize(N);
+	component.clear();
+	component.resize(N);
+
+	for(int i = 0; i < N; i++) {
+
+		component_of[i] = i;
+		component[i].push_back(i);
+		active_components++;
+	}
+}
+
+int mst_dsu(int x, int y) {
+
+	if(component_of[x] == component_of[y]) {
+
+		return 0;
+	}
+
+	active_components--;
+	int sx = component[component_of[x]].size();
+	int sy = component[component_of[y]].size();
+
+	if(sx > sy) {
+
+		swap(x, y);
+	}
+
+	for(int node : component[component_of[x]]) {
+
+		if(node != x) {
+
+			component_of[node] = component_of[y];
+			component[component_of[y]].push_back(node);
+		}
+	}
+
+	component[component_of[y]].push_back(x);
+	component[component_of[x]].clear();
+	component_of[x] = component_of[y];
+
+	return 1;
+}
+
+void kruskal_mst() {
+
+	// edges are in the form of array<int, 3>
+
+	mst_dsu_init(n_nodes);
+
+	sort(edges.begin(), edges.end(), [&](array<int, 3>& a, array<int, 3>& b) {
+
+		return a[2] < b[2];
+	});
+
+	auto add_edge = [&](int u, int v) {
+
+		adj[u].push_back(v);
+		adj[v].push_back(u);
+	};
+
+	for(auto& e : edges) {
+
+		int u = e[0], v = e[1];
+
+		if(mst_dsu(u, v)) {
+
+			add_edge(u, v);
+		}
+	}
+}
+]]></content>
+	<tabTrigger>kruskal</tabTrigger>
+	<scope>source.c++</scope>
+	<description>Kruskal MST</description>
+</snippet>
