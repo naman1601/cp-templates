@@ -88,24 +88,6 @@ ostream& operator <<(ostream& ostream, unordered_map<F, S>& v) {
 
 	return ostream;
 }
-
-template<typename F, typename S>
-istream& operator >>(istream& istream, pair<F, S>& p) {
-	
-	cin >> p.first >> p.second;
-	return istream;
-}
-
-template<typename T>
-istream& operator >>(istream& istream, vector<T>& v) {
-	
-	for(auto& element : v) {
-
-		cin >> element;
-	}
-
-	return istream;
-}
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
 	<tabTrigger>io_template</tabTrigger>
