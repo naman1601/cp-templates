@@ -88,8 +88,8 @@ vector<int> multiply(vector<int> const& a, vector<int> const& b) {
 	fa.resize(n);
 	fb.resize(n);
 
-	fft(fa, false);
-	fft(fb, false);
+	fft(fa);
+	fft(fb);
 
 	for (int i = 0; i < n; i++) {
 
