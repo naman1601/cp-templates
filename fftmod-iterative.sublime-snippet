@@ -1,0 +1,106 @@
+<snippet>
+	<content><![CDATA[
+const int MOD = 998244353;
+const int root = 15311432;
+const int root_inv = 469870224;
+const int root_pw = (1 << 23);
+
+void fft(vector<int>& a, bool invert = false) {
+
+	auto bit_reverse = [](int num, int lg_n) {
+
+		int res = 0;
+
+		for(int i = 0; i < lg_n; i++) {
+
+			if(num & (1 << i)) {
+
+				res |= (1 << (lg_n - 1 - i));
+			}
+		}
+
+		return res;
+	};
+
+	int n = (int)a.size();
+	int lg_n = 0;
+
+	while ((1 << lg_n) < n) {
+
+		lg_n++;
+	}
+
+	for(int i = 0; i < n; i++) {
+
+		int br = bit_reverse(i, lg_n);
+
+		if(i < br) {
+
+			swap(a[i], a[br]);
+		}
+	}
+
+	for(int len = 2; len <= n; len <<= 1) {
+
+		int wlen = invert ? root_inv : root;
+
+		for(int i = len; i < root_pw; i <<= 1) {
+
+			wlen = (1LL * wlen * wlen) % MOD;
+		}
+
+		for(int i = 0; i < n; i += len) {
+
+			int w = 1;
+
+			for(int j = 0; j < len / 2; j++) {
+
+				int u = a[i + j], v = (1LL * a[i + j + (len / 2)] * w) % MOD;
+				a[i + j] = (u + v) % MOD;
+				a[i + j + (len / 2)] = (u - v + MOD) % MOD;
+				w = (1LL * w * wlen) % MOD;
+			}
+		}
+	}
+
+	if(invert) {
+
+		int n_inv = modular_multiplicative_inverse(n, MOD);
+
+		for(int& x : a) {
+
+			x = (1LL * x * n_inv) % MOD;
+		}
+	}
+}
+
+
+vector<int> multiply(vector<int> const& a, vector<int> const& b) {
+
+	vector<int> fa(a.begin(), a.end()), fb(b.begin(), b.end());
+	int n = 1;
+
+	while (n < (int)a.size() + (int)b.size()) {
+
+		n <<= 1;
+	}
+	
+	fa.resize(n);
+	fb.resize(n);
+
+	fft(fa, false);
+	fft(fb, false);
+
+	for (int i = 0; i < n; i++) {
+
+		fa[i] = (1LL * fa[i] * fb[i]) % MOD;
+	} 
+
+	fft(fa, true);
+	return fa;
+}
+]]></content>
+	<tabTrigger>fftmod</tabTrigger>
+	<scope>source.c++</scope>
+	<description>FFT modulo 998244353</description>
+</snippet>
