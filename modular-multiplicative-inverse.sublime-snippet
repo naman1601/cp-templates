@@ -9,11 +9,11 @@ big modular_multiplicative_inverse(big n, big m) {
 
 		if(M & 1) {
 
-			retval = ((retval % m) * (n % m)) % m;
+			retval = (retval * n) % m;
 		}
 
 		M = M >> 1;
-		n = ((n % m) * (n % m)) % m;
+		n = (n * n) % m;
 	}
 
 	return retval % m;
