@@ -1,5 +1,24 @@
 <snippet>
 	<content><![CDATA[
+big modular_multiplicative_inverse(big n, big m) {
+
+	big retval = 1;
+	big M = m - 2;
+
+	while(M > 0) {
+
+		if(M & 1) {
+
+			retval = ((retval % m) * (n % m)) % m;
+		}
+
+		M = M >> 1;
+		n = ((n % m) * (n % m)) % m;
+	}
+
+	return retval % m;
+}
+
 const int MOD = 998244353;
 const int root = 15311432;
 const int root_inv = 469870224;
