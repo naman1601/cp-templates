@@ -64,7 +64,7 @@ void fft(vector<big>& a, bool invert = false) {
 
 			for(int j = 0; j < half_len; j++) {
 
-				int u = a[i + j], v = (a[i + j + half_len] * w) % MOD;
+				big u = a[i + j], v = (a[i + j + half_len] * w) % MOD;
 				a[i + j] = (u + v) % MOD;
 				a[i + j + half_len] = (u - v + MOD) % MOD;
 				w = (w * wlen) % MOD;
