@@ -1,0 +1,8 @@
+<snippet>
+	<content><![CDATA[
+assign(${1:}, ${2:})${3:}
+]]></content>
+	<tabTrigger>assign</tabTrigger>
+	<scope>source.c++</scope>
+	<description>C++ assign function</description>
+</snippet>

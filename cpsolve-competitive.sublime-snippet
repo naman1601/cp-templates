@@ -15,6 +15,40 @@
 using namespace std;
 
 template<typename F, typename S>
+ostream& operator <<(ostream& ostream, pair<F, S>& p) {
+
+	cout << p.first << " " << p.second;
+	return ostream;
+}
+
+template<typename T>
+ostream& operator <<(ostream& ostream, vector<T>& v) {
+
+	for(auto& element : v) {
+
+		cout << element << " ";
+	}
+
+	return ostream;
+}
+
+template<typename T>
+ostream& operator <<(ostream& ostream, vector<vector<T>>& v) {
+
+	for(auto& row : v) {
+
+		for(auto& cell : row) {
+
+			cout << cell << " ";
+		}
+
+		cout << "\n";
+	}
+
+	return ostream;
+}
+
+template<typename F, typename S>
 istream& operator >>(istream& istream, pair<F, S>& p) {
 	
 	cin >> p.first >> p.second;
