@@ -1,5 +1,7 @@
 <snippet>
 	<content><![CDATA[
+// using big = long long
+
 big modular_multiplicative_inverse(big n, big m) {
 
 	big retval = 1;
@@ -9,75 +11,63 @@ big modular_multiplicative_inverse(big n, big m) {
 
 		if(M & 1) {
 
-			retval = ((retval % m) * (n % m)) % m;
+			retval = (retval * n) % m;
 		}
 
 		M = M >> 1;
-		n = ((n % m) * (n % m)) % m;
+		n = (n * n) % m;
 	}
 
 	return retval % m;
 }
 
-const int MOD = 998244353;
-const int root = 15311432;
-const int root_inv = 469870224;
-const int root_pw = (1 << 23);
+const big MOD = 998244353;
+const big root = 15311432;
+const big root_inv = 469870224;
+const big root_pw = (1 << 23);
 
-void fft(vector<int>& a, bool invert = false) {
-
-	auto bit_reverse = [](int num, int lg_n) {
-
-		int res = 0;
-
-		for(int i = 0; i < lg_n; i++) {
-
-			if(num & (1 << i)) {
-
-				res |= (1 << (lg_n - 1 - i));
-			}
-		}
-
-		return res;
-	};
+void fft(vector<big>& a, bool invert = false) {
 
 	int n = (int)a.size();
-	int lg_n = 0;
 
-	while ((1 << lg_n) < n) {
+	for(int i = 1, j = 0; i < n; i++) {
 
-		lg_n++;
-	}
+		int bit = (n >> 1);
 
-	for(int i = 0; i < n; i++) {
+		for(; j & bit; bit >>= 1) {
 
-		int br = bit_reverse(i, lg_n);
+			j ^= bit;
+		}
 
-		if(i < br) {
+		j ^= bit;
 
-			swap(a[i], a[br]);
+		if(i < j) {
+
+			swap(a[i], a[j]);
 		}
 	}
+
 
 	for(int len = 2; len <= n; len <<= 1) {
 
-		int wlen = invert ? root_inv : root;
+		big wlen = invert ? root_inv : root;
 
 		for(int i = len; i < root_pw; i <<= 1) {
 
-			wlen = (1LL * wlen * wlen) % MOD;
+			wlen = (wlen * wlen) % MOD;
 		}
 
 		for(int i = 0; i < n; i += len) {
 
-			int w = 1;
+			big w = 1;
+			int half_len = len / 2;
 
-			for(int j = 0; j < len / 2; j++) {
+			for(int j = 0; j < half_len; j++) {
 
-				int u = a[i + j], v = (1LL * a[i + j + (len / 2)] * w) % MOD;
+				int u = a[i + j], v = (a[i + j + half_len] * w) % MOD;
 				a[i + j] = (u + v) % MOD;
-				a[i + j + (len / 2)] = (u - v + MOD) % MOD;
-				w = (1LL * w * wlen) % MOD;
+				a[i + j + half_len] = (u - v + MOD) % MOD;
+				w = (w * wlen) % MOD;
 			}
 		}
 	}
@@ -86,7 +76,7 @@ void fft(vector<int>& a, bool invert = false) {
 
 		int n_inv = modular_multiplicative_inverse(n, MOD);
 
-		for(int& x : a) {
+		for(auto& x : a) {
 
 			x = (1LL * x * n_inv) % MOD;
 		}
@@ -94,9 +84,9 @@ void fft(vector<int>& a, bool invert = false) {
 }
 
 
-vector<int> multiply(vector<int> const& a, vector<int> const& b) {
+vector<big> multiply(vector<big> const& a, vector<big> const& b) {
 
-	vector<int> fa(a.begin(), a.end()), fb(b.begin(), b.end());
+	vector<big> fa(a.begin(), a.end()), fb(b.begin(), b.end());
 	int n = 1;
 
 	while (n < (int)a.size() + (int)b.size()) {
@@ -112,7 +102,7 @@ vector<int> multiply(vector<int> const& a, vector<int> const& b) {
 
 	for (int i = 0; i < n; i++) {
 
-		fa[i] = (1LL * fa[i] * fb[i]) % MOD;
+		fa[i] = (fa[i] * fb[i]) % MOD;
 	} 
 
 	fft(fa, true);
