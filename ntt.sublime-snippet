@@ -109,7 +109,7 @@ vector<big> multiply(vector<big> const& a, vector<big> const& b) {
 	return fa;
 }
 ]]></content>
-	<tabTrigger>fftmod</tabTrigger>
+	<tabTrigger>ntt</tabTrigger>
 	<scope>source.c++</scope>
-	<description>FFT modulo 998244353</description>
+	<description>NTT modulo 998244353</description>
 </snippet>
