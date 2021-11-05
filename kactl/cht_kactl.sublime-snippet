@@ -13,7 +13,6 @@ struct Line {
 	bool operator<(const Line& o) const { return k < o.k; }
 	bool operator<(cht_type x) const { return p < x; }
 };
-
 struct LineContainer : multiset<Line, less<>> {
 	// (for doubles, use infy = 1/.0, div(a,b) = a/b)
 	// toggle comment block
