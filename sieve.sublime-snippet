@@ -4,21 +4,21 @@ vector<int> isprime;
 vector<int> primes;
 vector<int> spf;
 
-void sieve(big maxn) {
+void sieve(big N) {
 
-	isprime = vector<int>(maxn, 1);
-	spf = vector<int>(maxn);
+	isprime = vector<int>(N, 1);
+	spf = vector<int>(N);
 
-	fr(i, 0, maxn) {
+	fr(i, 0, N) {
 
 		spf[i] = i;
 	}
 
-	for(big i = 2; i < maxn; i++) {
+	for(big i = 2; i < N; i++) {
 
 		if(!isprime[i]) continue;
 
-		for(big j = i * i; j < maxn; j += i) {
+		for(big j = i * i; j < N; j += i) {
 
 			isprime[j] = 0;
 
@@ -30,7 +30,7 @@ void sieve(big maxn) {
 	}
 
 
-	${1:}for(big i = 2; i < maxn; i++) {
+	${1:}for(big i = 2; i < N; i++) {
 
 		${1:}if(isprime[i]) primes.push_back(i);
 	${1:}}
