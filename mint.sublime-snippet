@@ -1,9 +1,10 @@
 <snippet>
 	<content><![CDATA[
+// int MOD = mod;
 template<int MOD = 998244353>
 struct mint {
 	int value;
-	static const int MOD_value = MOD;
+	// static const int MOD_value = MOD;
 
 	mint(long long v = 0) { value = v % MOD; if (value < 0) value += MOD;}
 	mint(long long a, long long b) : value(0){ *this += a; *this /= b;}
@@ -25,7 +26,8 @@ struct mint {
 	friend mint operator-(mint const a) { return 0 - a; }
 	friend mint operator*(mint a, mint const b) { return a *= b; }
 	friend mint operator/(mint a, mint const b) { return a /= b; }
-	friend std::ostream& operator<<(std::ostream& os, mint const& a) {return os << a.value;}
+	friend std::istream& operator>>(std::istream& istream, mint& a) {long long v; istream >> v; a = v; return istream;}
+	friend std::ostream& operator<<(std::ostream& ostream, mint const& a) {return ostream << a.value;}
 	friend bool operator==(mint const& a, mint const& b) {return a.value == b.value;}
 	friend bool operator!=(mint const& a, mint const& b) {return a.value != b.value;}
 };
