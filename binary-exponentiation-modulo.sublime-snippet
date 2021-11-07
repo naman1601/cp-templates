@@ -1,19 +1,18 @@
 <snippet>
 	<content><![CDATA[
-big binary_exponentiation_modulo(big n, big M) {
+big binary_exponentiation_modulo(big n, big M, big m = mod) {
 
 	big retval = 1;
-	big m = mod;
 
 	while(M > 0) {
 
 		if(M & 1) {
 
-			retval = ((retval % m) * (n % m)) % m;
+			retval = (retval * n) % m;
 		}
 
 		M = M >> 1;
-		n = ((n % m) * (n % m)) % m;
+		n = (n * n) % m;
 	}
 
 	return retval % m;
