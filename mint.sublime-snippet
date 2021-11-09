@@ -13,12 +13,12 @@ struct mint {
 	mint& operator-=(mint const& b) {value -= b.value; if (value < 0) value += MOD;return *this;}
 	mint& operator*=(mint const& b) {value = (long long)value * b.value % MOD;return *this;}
 
-	friend mint mexp(mint a, long long e) {
+	mint mexp(mint a, long long e) {
 		mint res = 1; while (e) { if (e&1) res *= a; a *= a; e >>= 1; }
 		return res;
 	}
 	
-	friend mint inverse(mint a) { return mexp(a, MOD - 2); }
+	mint inverse(mint a) { return mexp(a, MOD - 2); }
 
 	mint& operator/=(mint const& b) { return *this *= inverse(b); }
 	friend mint operator+(mint a, mint const b) { return a += b; }

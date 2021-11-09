@@ -24,12 +24,12 @@ big modular_multiplicative_inverse(big n, big m) {
 
 void precompute_factorials(big maxnum) {
 	
-	factorials = vector<big>(maxnum);
-	mmi = vector<big>(maxnum);
-	factorials[0] = 1;
-	factorials[1] = 1;
-	mmi[0] = 1;
-	mmi[1] = 1;
+	factorials.assign(maxnum, 1);
+	mmi.assign(maxnum, 1);
+	// factorials[0] = 1;
+	// factorials[1] = 1;
+	// mmi[0] = 1;
+	// mmi[1] = 1;
 
 	for(int i = 2; i < maxnum; i++) {
 
