@@ -1,36 +1,39 @@
 <snippet>
 	<content><![CDATA[
+// make mod constexpr if not variable mod
 // int MOD = mod;
 template<int MOD = 998244353>
-struct mint {
+struct Mint {
 	int value;
 	// static const int MOD_value = MOD;
 
-	mint(long long v = 0) { value = v % MOD; if (value < 0) value += MOD;}
-	mint(long long a, long long b) : value(0){ *this += a; *this /= b;}
+	Mint(long long v = 0) { value = v % MOD; if (value < 0) value += MOD;}
+	Mint(long long a, long long b) : value(0){ *this += a; *this /= b;}
 
-	mint& operator+=(mint const& b) {value += b.value; if (value >= MOD) value -= MOD; return *this;}
-	mint& operator-=(mint const& b) {value -= b.value; if (value < 0) value += MOD;return *this;}
-	mint& operator*=(mint const& b) {value = (long long)value * b.value % MOD;return *this;}
+	Mint& operator+=(Mint const& b) {value += b.value; if (value >= MOD) value -= MOD; return *this;}
+	Mint& operator-=(Mint const& b) {value -= b.value; if (value < 0) value += MOD;return *this;}
+	Mint& operator*=(Mint const& b) {value = (long long)value * b.value % MOD;return *this;}
 
-	mint mexp(mint a, long long e) {
-		mint res = 1; while (e) { if (e&1) res *= a; a *= a; e >>= 1; }
+	Mint mexp(Mint a, long long e) {
+		Mint res = 1; while (e) { if (e&1) res *= a; a *= a; e >>= 1; }
 		return res;
 	}
 	
-	mint inverse(mint a) { return mexp(a, MOD - 2); }
+	Mint inverse(Mint a) { return mexp(a, MOD - 2); }
 
-	mint& operator/=(mint const& b) { return *this *= inverse(b); }
-	friend mint operator+(mint a, mint const b) { return a += b; }
-	friend mint operator-(mint a, mint const b) { return a -= b; }
-	friend mint operator-(mint const a) { return 0 - a; }
-	friend mint operator*(mint a, mint const b) { return a *= b; }
-	friend mint operator/(mint a, mint const b) { return a /= b; }
-	friend std::istream& operator>>(std::istream& istream, mint& a) {long long v; istream >> v; a = v; return istream;}
-	friend std::ostream& operator<<(std::ostream& ostream, mint const& a) {return ostream << a.value;}
-	friend bool operator==(mint const& a, mint const& b) {return a.value == b.value;}
-	friend bool operator!=(mint const& a, mint const& b) {return a.value != b.value;}
+	Mint& operator/=(Mint const& b) { return *this *= inverse(b); }
+	friend Mint operator+(Mint a, Mint const b) { return a += b; }
+	friend Mint operator-(Mint a, Mint const b) { return a -= b; }
+	friend Mint operator-(Mint const a) { return 0 - a; }
+	friend Mint operator*(Mint a, Mint const b) { return a *= b; }
+	friend Mint operator/(Mint a, Mint const b) { return a /= b; }
+	friend std::istream& operator>>(std::istream& istream, Mint& a) {long long v; istream >> v; a = v; return istream;}
+	friend std::ostream& operator<<(std::ostream& ostream, Mint const& a) {return ostream << a.value;}
+	friend bool operator==(Mint const& a, Mint const& b) {return a.value == b.value;}
+	friend bool operator!=(Mint const& a, Mint const& b) {return a.value != b.value;}
 };
+
+using mint = Mint<mod>;
 ]]></content>
 	<tabTrigger>mint</tabTrigger>
 	<scope>source.c++</scope>
