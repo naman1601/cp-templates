@@ -1,0 +1,58 @@
+<snippet>
+	<content><![CDATA[
+vector<mint> factorial, mmi;
+
+void precompute_factorials(int maxnum) {
+
+	factorial.assign(maxnum, 1);
+	mmi.assign(maxnum, 1);
+
+	for(int i = 2; i < maxnum; i++) {
+
+		factorial[i] = factorial[i - 1] * i;
+	}
+
+
+	// IF mmi[i] == inverse(factorial[i])
+
+	// mmi[maxnum - 1] = 1 / factorial[maxnum - 1];
+
+	// for(int i = maxnum - 2; i >= 2; i--) {
+
+	// 	mmi[i] = mmi[i + 1] * (i + 1);
+	// }
+
+
+	// IF mmi[i] == inverse(i)
+
+	// for(int i = maxnum - 1; i >= 2; i--) {
+
+	// 	mmi[i] = mint(1) / mint(i);
+	// }
+}
+
+
+mint nCr(big n, big r) {
+
+	if(n < r) {
+
+		return 0;
+	}
+
+	if (n == r) {
+
+		return 1;
+	}
+
+	if(r == 0) {
+
+		return 1;
+	}
+
+	return (factorial[n] * mmi[r] * mmi[n - r]);
+}
+]]></content>
+	<tabTrigger>mint-combinatorics</tabTrigger>
+	<scope>source.c++</scope>
+	<description>Combinatorics to be used with Mint struct</description>
+</snippet>
