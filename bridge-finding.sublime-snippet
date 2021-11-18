@@ -1,0 +1,56 @@
+<snippet>
+	<content><![CDATA[
+vector<int> low, t_in, vtd;
+vector<map<int, int>> is_bridge;
+int timer = 0;
+
+void bridge_dfs(int v, int p = -1) {
+
+	vtd[v] = 1;
+	t_in[v] = low[v] = timer++;
+
+	for(int u : adj[v]) {
+
+		if(u == p) {
+
+			continue;
+		}
+
+		if(vtd[u]) {
+
+			low[v] = min(low[v], t_in[u]);
+
+		} else {
+
+			bridge_dfs(u, v);
+			low[v] = min(low[v], low[u]);
+
+			if(low[u] > t_in[v]) {
+
+				is_bridge[v][u] = is_bridge[u][v] = 1;
+			}
+		}
+	}
+}
+
+void find_bridges() {
+
+	low.assign(n_nodes, -1);
+	t_in.assign(n_nodes, -1);
+	vtd.assign(n_nodes, 0);
+	is_bridge.clear();
+	is_bridge.resize(n_nodes);
+
+	fr(v, 0, n_nodes) {
+
+		if(!vtd[v]) {
+
+			bridge_dfs(v);
+		}
+	}
+}
+]]></content>
+	<tabTrigger>bridge-finding</tabTrigger>
+	<scope>source.c++</scope>
+	<description>Finding bridges in a graph</description>
+</snippet>

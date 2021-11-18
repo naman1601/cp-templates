@@ -2,7 +2,7 @@
 	<content><![CDATA[
 // make mod constexpr if not variable mod
 // int MOD = mod;
-template<int MOD = 998244353>
+template<int MOD = mod>
 struct Mint {
 	int value;
 	// static const int MOD_value = MOD;
