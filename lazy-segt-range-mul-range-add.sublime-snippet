@@ -1,0 +1,169 @@
+<snippet>
+	<content><![CDATA[
+constexpr pbb og = make_pair(1, 0);
+
+struct lazyt {
+	
+	int tl;
+	vector<big> t;
+	vector<pbb> lazy;
+
+	lazyt(int l, big val) {
+
+		tl = l;
+		t = vector<big>(tl << 2, val);
+		lazy = vector<pbb>(tl << 2, og);
+	}
+
+
+	big task(big child1, big child2) {
+	 
+		return child1 + child2;
+	}
+
+
+	void push(int child, int node, int l, int r) {
+
+		lazy[child].fe *= lazy[node].fe;
+		lazy[child].se *= lazy[node].fe;
+		lazy[child].se += lazy[node].se;
+		t[child] = t[child] * lazy[node].fe + (r - l) * lazy[node].se;
+	}
+	 
+	void push(int node, int l, int r) {
+
+		if(lazy[node].fe == 1 && lazy[node].se == 0) {
+
+			return;
+		}
+
+		int child1 = node << 1;
+		int child2 = (node << 1) + 1;
+		int mid = (l + r) >> 1;
+
+		push(child1, node, l, mid + 1);
+		push(child2, node, mid, r);
+		lazy[node] = og;
+	}
+	 
+	 
+	void range_mul(int node, int l, int r, int lq, int rq, big val) {
+	 
+		if(lq > rq) {
+	 
+			return;
+		}
+	 
+		if(l == lq && r == rq) {
+
+			if(l != r) {
+
+				push(node, l, r);
+			}
+	 
+			lazy[node].fe *= val;
+			lazy[node].se *= val;
+			t[node] *= val;
+	 
+		} else {
+	 
+			push(node, l, r);
+	 
+			int mid = (l + r) >> 1;
+			range_mul(node << 1, l, mid, lq, min(mid, rq), val);
+			range_mul((node << 1) + 1, mid + 1, r, max(mid + 1, lq), rq, val);
+	 
+			t[node] = task(t[node << 1], t[(node << 1) + 1]);
+		}
+	}
+
+	void range_mul(int lq, int rq, big val) {
+
+		range_mul(1, 0, tl - 1, lq, rq, val);
+	}
+	 
+	 
+	void range_add(int node, int l, int r, int lq, int rq, big val) {
+	 
+		if(lq > rq) {
+	 
+			return;
+		}
+	 
+		if(l == lq && r == rq) {
+
+			if(l != r) {
+
+				push(node, l, r);
+			}
+	 
+			lazy[node].se += val;
+			t[node] += (r - l + 1) * val;
+	 
+		} else {
+	 
+			push(node, l, r);
+	 
+			int mid = (l + r) >> 1;
+			range_add(node << 1, l, mid, lq, min(mid, rq), val);
+			range_add((node << 1) + 1, mid + 1, r, max(mid + 1, lq), rq, val);
+	 
+			t[node] = task(t[node << 1], t[(node << 1) + 1]);
+		}
+	}
+
+	void range_add(int lq, int rq, big val) {
+
+		range_add(1, 0, tl - 1, lq, rq, val);
+	}
+	 
+	 
+	big query(int node, int l, int r, int lq, int rq) {
+	 
+		if(lq > rq) {
+	 
+			return 0;
+	 
+		} else if(lq <= l && rq >= r) {
+	 
+			return t[node];
+	 
+		} else {
+	 
+			push(node, l, r);
+			int mid = (l + r) >> 1;
+			return task(query(node << 1, l, mid, lq, min(rq, mid)), query((node << 1) + 1, mid + 1, r, max(lq, mid + 1), rq));
+		}
+	}
+
+	big query(int lq, int rq) {
+
+		return query(1, 0, tl - 1, lq, rq);
+	}
+	 
+	 
+	void build(vector<big>& v, int node, int l, int r) {
+	 
+		if(l == r) {
+	 
+			t[node] = v[l];
+	 
+		} else {
+	 
+			int mid = (l + r) >> 1;
+			build(v, node << 1, l, mid);
+			build(v, (node << 1) + 1, mid + 1, r);
+			t[node] = task(t[node << 1], t[(node << 1) + 1]);
+		}
+	}
+
+	void build(vector<big>& v) {
+
+		build(v, 1, 0, tl - 1);
+	}
+};
+]]></content>
+	<tabTrigger>lazy-segt-range-mul</tabTrigger>
+	<scope>source.c++</scope>
+	<description>Lazy segment tree supporting range multiplication and addition</description>
+</snippet>
