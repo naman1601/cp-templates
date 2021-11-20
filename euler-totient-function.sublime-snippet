@@ -1,0 +1,31 @@
+<snippet>
+	<content><![CDATA[
+int phi(int N) {
+
+	int result = N;
+
+	for(int i = 2; i * i <= N; i++) {
+
+		if(N % i == 0) {
+
+			while(N % i == 0) {
+
+				N /= i;
+			}
+
+			result -= result / i;
+		}
+	}
+
+	if (N > 1) {
+
+		result -= result / N;
+	}
+
+	return result;
+}
+]]></content>
+	<tabTrigger>euler-totient-function</tabTrigger>
+	<scope>source.c++</scope>
+	<description>Euler's Totient function in sqrt(N)</description>
+</snippet>
