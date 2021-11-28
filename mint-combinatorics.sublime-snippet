@@ -1,25 +1,34 @@
 <snippet>
 	<content><![CDATA[
 vector<mint> factorial, mmi;
+// vector<mint> inv;
 
 void precompute_factorials(int maxnum) {
 
 	factorial.assign(maxnum, 1);
 	mmi.assign(maxnum, 1);
+	// inv.assign(maxnum, 1);
 
 	for(int i = 2; i < maxnum; i++) {
 
 		factorial[i] = factorial[i - 1] * i;
 	}
 
-
 	// IF mmi[i] == inverse(factorial[i])
 
-	// mmi[maxnum - 1] = 1 / factorial[maxnum - 1];
+	mmi[maxnum - 1] = 1 / factorial[maxnum - 1];
 
-	// for(int i = maxnum - 2; i >= 2; i--) {
+	for(int i = maxnum - 2; i >= 2; i--) {
+		
+		mmi[i] = mmi[i + 1] * (i + 1);
+	}
 
-	// 	mmi[i] = mmi[i + 1] * (i + 1);
+	// calculating inv[i] in linear time using mmi[i]
+	// inv[i] = inverse(i); mmi[i] = inverse(factorial[i])
+
+	// for(int i = maxnum - 1; i >= 2; --) {
+
+	// 	inv[i] = factorial[i - 1] * mmi[i];
 	// }
 
 
@@ -31,21 +40,17 @@ void precompute_factorials(int maxnum) {
 	// }
 }
 
-
 mint nCr(big n, big r) {
 
 	if(n < r) {
-
 		return 0;
 	}
 
 	if (n == r) {
-
 		return 1;
 	}
 
 	if(r == 0) {
-
 		return 1;
 	}
 
