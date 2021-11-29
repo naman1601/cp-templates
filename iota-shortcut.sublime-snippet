@@ -1,0 +1,8 @@
+<snippet>
+	<content><![CDATA[
+iota(${1:}.begin(), ${1:}.end(), ${2:0})${3:;}
+]]></content>
+	<tabTrigger>iota-shortcut</tabTrigger>
+	<scope>source.c++</scope>
+	<description>iota shortcut</description>
+</snippet>
