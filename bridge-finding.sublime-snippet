@@ -1,7 +1,7 @@
 <snippet>
 	<content><![CDATA[
-vector<int> low, t_in, vtd;
-vector<map<int, int>> is_bridge;
+// uses vector adj of the form pair<int, int> : {next node, edge id}
+vector<int> low, t_in, vtd, is_bridge;
 int timer = 0;
 
 void bridge_dfs(int v, int p = -1) {
@@ -9,7 +9,9 @@ void bridge_dfs(int v, int p = -1) {
 	vtd[v] = 1;
 	t_in[v] = low[v] = timer++;
 
-	for(int u : adj[v]) {
+	for(auto e : adj[v]) {
+
+		int u = e.fe, edge_id = e.se;
 
 		if(u == p) {
 
@@ -27,7 +29,7 @@ void bridge_dfs(int v, int p = -1) {
 
 			if(low[u] > t_in[v]) {
 
-				is_bridge[v][u] = is_bridge[u][v] = 1;
+				is_bridge[edge_id] = 1;
 			}
 		}
 	}
@@ -38,8 +40,7 @@ void find_bridges() {
 	low.assign(n_nodes, -1);
 	t_in.assign(n_nodes, -1);
 	vtd.assign(n_nodes, 0);
-	is_bridge.clear();
-	is_bridge.resize(n_nodes);
+	is_bridge.assign(n_edges, 0);
 
 	fr(v, 0, n_nodes) {
 
