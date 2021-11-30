@@ -1,14 +1,21 @@
 <snippet>
 	<content><![CDATA[
+template<typename T>
 struct prefix_sum {
 
 	int tl;
-	vector<long long> t;
+	vector<T> t;
 
-	template<typename T>
-	prefix_sum(vector<T>& v) {
+	template<typename S>
+	prefix_sum(vector<S>& v) {
 
 		tl = (int)v.size();
+
+		if(!tl) {
+
+			return;
+		}
+
 		t.clear();
 		t.resize(tl, 0);
 		t[0] = v[0];
@@ -19,11 +26,11 @@ struct prefix_sum {
 		}
 	}
 
-	long long query(int l, int r) {
+	T query(int l, int r) {
 
-		if(l > r) {
+		if((tl == 0) || (l > r) || (r < 0)) {
 
-			return 0LL;
+			return 0;
 		}
 
 		if(l > 0) {
