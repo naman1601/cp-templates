@@ -20,19 +20,10 @@ void graph_init() {
 	// depth.assign(n_nodes, 0);
 }
 
-void add_edge(int u, int v, int edge_id = -1) {
-	
-	if(edge_id == -1) {
+void add_edge(int u, int v) {
 
-		adj[u].push_back(v);
-		adj[v].push_back(u);
-
-	} else {
-
-		adj[u].emplace_back(v, edge_id);
-		adj[v].emplace_back(u, edge_id);
-		edges.emplace_back(u, v);
-	}
+	adj[u].push_back(v);
+	adj[v].push_back(u);
 }
 
 void dfs(int v, int p) {

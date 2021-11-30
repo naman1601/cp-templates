@@ -62,7 +62,7 @@ struct DSU {
 
 		return 1;
 	}
-}
+};
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
 	<tabTrigger>dsu</tabTrigger>
