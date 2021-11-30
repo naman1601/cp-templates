@@ -1,55 +1,67 @@
 <snippet>
 	<content><![CDATA[
-vector<vector<int>> component;
-vector<int> component_of;
-int component_control;
-int active_components;
+struct DSU {
+	
+	vector<vector<int>> component;
+	vector<int> component_of;
+	int component_control;
+	int active_components;
 
-void dsu_init(int N) {
-		
-	component_control = 0;
-	active_components = 0;
-	component_of.clear();
-	component_of.resize(N);
-	component.clear();
-	component.resize(N);
+	DSU() {}
 
-	for(int i = 0; i < N; i++) {
+	DSU(int N) {
+			
+		component_control = 0;
+		active_components = 0;
+		component_of.clear();
+		component_of.resize(N);
+		component.clear();
+		component.resize(N);
 
-		component_of[i] = i;
-		component[i].push_back(i);
-		active_components++;
-	}
-}
+		for(int i = 0; i < N; i++) {
 
-void dsu(int x, int y) {
-
-	if(component_of[x] == component_of[y]) {
-
-		return;
-	}
-
-	active_components--;
-	int sx = component[component_of[x]].size();
-	int sy = component[component_of[y]].size();
-
-	if(sx > sy) {
-
-		swap(x, y);
-	}
-
-	for(int node : component[component_of[x]]) {
-
-		if(node != x) {
-
-			component_of[node] = component_of[y];
-			component[component_of[y]].push_back(node);
+			component_of[i] = i;
+			component[i].push_back(i);
+			active_components++;
 		}
 	}
 
-	component[component_of[y]].push_back(x);
-	component[component_of[x]].clear();
-	component_of[x] = component_of[y];
+	int component_size_of(int v) {
+
+		return (int)component[component_of[v]].size();
+	}
+
+	int dsu(int x, int y) {
+
+		if(component_of[x] == component_of[y]) {
+
+			return 0;
+		}
+
+		active_components--;
+		int sx = component[component_of[x]].size();
+		int sy = component[component_of[y]].size();
+
+		if(sx >= sy) {
+
+			swap(x, y);
+		}
+
+		for(int node : component[component_of[x]]) {
+
+			if(node != x) {
+
+				component_of[node] = component_of[y];
+				component[component_of[y]].push_back(node);
+			}
+		}
+
+		component[component_of[y]].push_back(x);
+		component[component_of[x]].clear();
+		component_of[x] = component_of[y];
+
+		return 1;
+	}
 }
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->

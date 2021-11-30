@@ -4,7 +4,7 @@
 int n_nodes, n_edges;
 vector<vector<int>> adj;
 // vector<pii> edges;
-// vector<vector<int>> rev;
+// vector<vector<int>> rev_adj;
 // vector<int> visited;
 // vector<int> depth;
 // vector<int> sz;
