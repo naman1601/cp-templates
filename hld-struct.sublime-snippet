@@ -1,91 +1,23 @@
 <snippet>
 	<content><![CDATA[
-struct hld {
+template<typename T>
+struct hld_t {
 
-	int n, tl;
-	vector<int> t;
-	vector<int> hld_path;
-	vector<int> pos;
-	vector<int> heavy_of;
-	vector<int> head_of;
-	vector<int> parent_of;
+	int tl;
+	vector<T> t;
 
-	hld(int n_nodes) {
+	void init(int l, T val) {
 
-		n = n_nodes;
-		tl = n_nodes;
-
-		hld_path.clear();
-		hld_path.reserve(n);
-		pos.clear();
-		pos.resize(n);
-		heavy_of.clear();
-		heavy_of.resize(n, -1);
-		head_of.clear();
-		head_of.resize(n);
-		parent_of.clear();
-		parent_of.resize(n);
-
-		t.clear();
-		t.resize(tl << 2, 0);
-
-		parent_of[0] = 0;
-		dfs(0);
-		head_of[0] = 0;
-		decompose(0);
-
-		t_build(hld_path);
+		tl = l;
+		t = vector<T>(tl << 2, val);
 	}
 
-	int dfs(int node) {
-
-		int subtree_size = 1;
-		int current_heavy_size = -1;
-
-		for(int next : adj[node]) {
-
-			if(next == parent_of[node]) continue;
-
-			parent_of[next] = node;
-			int next_size = dfs(next);
-			subtree_size += next_size;
-
-			if(next_size > current_heavy_size) {
-
-				current_heavy_size = next_size;
-				heavy_of[node] = next;
-			}
-		}
-
-		return subtree_size;
-	}
-
-	void decompose(int node) {
-
-		pos[node] = hld_path.size();
-		hld_path.push_back(node);
-
-		if(heavy_of[node] != -1) {
-
-			head_of[heavy_of[node]] = head_of[node];
-			decompose(heavy_of[node]);
-		}
-
-		for(int next : adj[node]) {
-
-			if(next == heavy_of[node] || next == parent_of[node]) continue;
-
-			head_of[next] = next;
-			decompose(next);
-		}
-	}
-
-	int t_task(int child1, int child2) {
+	T task(T child1, T child2) {
 	
 		return child1 + child2;
 	}
 	
-	void t_update(int node, int l, int r, int pos, int val) {
+	void update(int node, int l, int r, int pos, T val) {
 	
 		if(l == r) {
 	
@@ -97,23 +29,23 @@ struct hld {
 	
 			if(pos <= mid) {
 	
-				t_update(node << 1, l, mid, pos, val);
+				update(node << 1, l, mid, pos, val);
 	
 			} else {
 	
-				t_update((node << 1) + 1, mid + 1, r, pos, val);
+				update((node << 1) + 1, mid + 1, r, pos, val);
 			}
 	
-			t[node] = t_task(t[node << 1], t[(node << 1) + 1]);
+			t[node] = task(t[node << 1], t[(node << 1) + 1]);
 		}
 	}
 
-	void t_update(int pos, int val) {
+	void update(int pos, T val) {
 
-		t_update(1, 0, tl - 1, pos, val);
+		update(1, 0, tl - 1, pos, val);
 	}
 	
-	int t_query(int node, int l, int r, int lq, int rq) {
+	T query(int node, int l, int r, int lq, int rq) {
 	
 		if(lq > rq) {
 	
@@ -126,16 +58,16 @@ struct hld {
 		} else {
 	
 			int mid = (l + r) >> 1;
-			return t_task(t_query(node << 1, l, mid, lq, min(rq, mid)), t_query((node << 1) + 1, mid + 1, r, max(lq, mid + 1), rq));
+			return task(query(node << 1, l, mid, lq, min(rq, mid)), query((node << 1) + 1, mid + 1, r, max(lq, mid + 1), rq));
 		}
 	}
 
-	int t_query(int lq, int rq) {
+	T query(int lq, int rq) {
 
-		return t_query(1, 0, tl - 1, lq, rq);
+		return query(1, 0, tl - 1, lq, rq);
 	}
 	
-	void t_build(vector<int>& v, int node, int l, int r) {
+	void build(vector<int>& v, int node, int l, int r) {
 	
 		if(l == r) {
 	
@@ -145,38 +77,120 @@ struct hld {
 		} else {
 	
 			int mid = (l + r) >> 1;
-			t_build(v, node << 1, l, mid);
-			t_build(v, (node << 1) + 1, mid + 1, r);
-			t[node] = t_task(t[node << 1], t[(node << 1) + 1]);
+			build(v, node << 1, l, mid);
+			build(v, (node << 1) + 1, mid + 1, r);
+			t[node] = task(t[node << 1], t[(node << 1) + 1]);
 		}
 	}
 
-	void t_build(vector<int>& v) {
+	void build(vector<int>& v) {
 
-		t_build(v, 1, 0, tl - 1);
+		build(v, 1, 0, tl - 1);
+	}
+};
+
+
+template<typename T>
+struct hld {
+
+	int N;
+	vector<int> hld_path;
+	vector<int> pos;
+	vector<int> heavy_of;
+	vector<int> head_of;
+	vector<int> parent_of;
+
+	hld_t<T> t;
+
+	hld(vector<vector<int>>& adj) {
+
+		N = (int)adj.size();
+
+		hld_path.clear();
+		hld_path.reserve(N);
+		pos.clear();
+		pos.resize(N);
+		heavy_of.clear();
+		heavy_of.resize(N, -1);
+		head_of.clear();
+		head_of.resize(N);
+		parent_of.clear();
+		parent_of.resize(N);
+
+		t.init(N, 0);
+
+		parent_of[0] = 0;
+		dfs(adj, 0);
+		head_of[0] = 0;
+		decompose(adj, 0);
+
+		t.build(hld_path);
 	}
 
-	int task(int v1, int v2) {
+	int dfs(vector<vector<int>>& adj, int node) {
 
-		return v1 + v2;
+		int subtree_size = 1;
+		int current_heavy_size = -1;
+
+		for(int next : adj[node]) {
+
+			if(next == parent_of[node]) continue;
+
+			parent_of[next] = node;
+			int next_size = dfs(adj, next);
+			subtree_size += next_size;
+
+			if(next_size > current_heavy_size) {
+
+				current_heavy_size = next_size;
+				heavy_of[node] = next;
+			}
+		}
+
+		return subtree_size;
 	}
 
-	int query(int node, int ancestor) {
+	void decompose(vector<vector<int>>& adj, int node) {
 
-		int retval = 0;
+		pos[node] = hld_path.size();
+		hld_path.push_back(node);
+
+		if(heavy_of[node] != -1) {
+
+			head_of[heavy_of[node]] = head_of[node];
+			decompose(adj, heavy_of[node]);
+		}
+
+		for(int next : adj[node]) {
+
+			if(next == heavy_of[node] || next == parent_of[node]) continue;
+
+			head_of[next] = next;
+			decompose(adj, next);
+		}
+	}
+
+	T task(T v1, T v2) {
+
+		return t.task(v1, v2);
+	}
+
+	T query(int node, int ancestor) {
+
+		T retval = 0;
 
 		for(; head_of[node] != head_of[ancestor]; node = parent_of[head_of[node]]) {
 
-			retval = task(retval, t_query(pos[head_of[node]], pos[node]));
+			retval = task(retval, t.query(pos[head_of[node]], pos[node]));
 		}
 
-		retval = task(retval, t_query(pos[ancestor], pos[node]));
+		retval = task(retval, t.query(pos[ancestor], pos[node]));
 		return retval;
 	}
 
-	void update(int node, int value) {
+	void update(int node, T value) {
 
-		t_update(pos[node], value);
+		t.update(pos[node], value);
 	}
 };
 ]]></content>

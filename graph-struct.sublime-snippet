@@ -1,0 +1,30 @@
+<snippet>
+	<content><![CDATA[
+struct graph {
+	
+	int n_nodes, n_edges;
+	vector<vector<int>> g;
+	// vector<vector<int>> gt;
+	// vector<pii> edges;
+	// vector<int> vtd;
+	// vector<int> depth;
+
+	graph(){}
+
+	graph(int _n_nodes, int _n_edges) : n_nodes(_n_nodes), n_edges(_n_edges) {
+
+		g.clear();
+		g.resize(n_nodes);
+	}
+
+	void add_edge(int u, int v) {
+
+		g[u].push_back(v);
+		g[v].push_back(u);
+	}
+};
+]]></content>
+	<tabTrigger>graph-struct</tabTrigger>
+	<scope>source.c++</scope>
+	<description>Graph Struct</description>
+</snippet>

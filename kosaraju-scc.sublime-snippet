@@ -1,74 +1,75 @@
 <snippet>
 	<content><![CDATA[
-// const int maxn = 2e5 + 5;
-// int vtd[maxn];
-// int scc_of[maxn];
-// int n_nodes;
-// vector<vector<int>> adj;
-// vector<vector<int>> rev_adj;
-vector<int> vtd;
-vector<int> scc_of;
-vector<int> path;
-int scc_id;
+struct SCC {
 
-void add_edge(int v, int u) {
+	int N;
+	// vector<vector<int>> adj;
+	// vector<vector<int>> rev_adj;
+	vector<int> vtd;
+	vector<int> scc_of;
+	vector<int> path;
+	int scc_id;
 
-	adj[v].push_back(u);
-	rev_adj[u].push_back(v);
-}
+	SCC(){}
 
-void dfs1(int node) {
+	SCC(vector<vector<int>>& adj, vector<vector<int>>& rev_adj) {
 
-	vtd[node] = 1;
-
-	for(int next : adj[node]) {
-
-		if(!vtd[next]) {
-
-			dfs1(next);
-		}
+		N = (int)adj.size();
+		scc_id = 0;
+		scc_of.assign(N, -1);
+		vtd.assign(N, 0);
+		kosaraju(adj, rev_adj);
 	}
 
-	path.push_back(node);
-}
+	// void add_edge(int u, int v) {
 
-void dfs2(int node) {
-
-	for(int next : rev_adj[node]) {
-
-		if(scc_of[next] == -1) {
-
-			scc_of[next] = scc_of[node];
-			dfs2(next);
-		}
-	}
-}
-
-void kosaraju() {
-
-	scc_id = 0;
-	scc_of.assign(n_nodes, -1);
-	vtd.assign(n_nodes, 0);
-
-	// fr(i, 0, n_nodes) {
-
-	// 	vtd[i] = 0;
-	// 	scc_of[i] = -1;
+	// 	adj[u].push_back(v);
+	// 	rev_adj[v].push_back(u);
 	// }
 
-	fr(i, 0, n_nodes) {
+	void dfs1(vector<vector<int>>& adj, int node) {
 
-		if(!vtd[i]) dfs1(i);
+		vtd[node] = 1;
+
+		for(int next : adj[node]) {
+
+			if(!vtd[next]) {
+
+				dfs1(adj, next);
+			}
+		}
+
+		path.push_back(node);
 	}
 
-	reverse(path.begin(), path.end());
+	void dfs2(vector<vector<int>>& rev_adj, int node) {
 
-	fr(i, 0, n_nodes) {
+		for(int next : rev_adj[node]) {
 
-		if(scc_of[path[i]] == -1) {
+			if(scc_of[next] == -1) {
 
-			scc_of[path[i]] = scc_id++;
-			dfs2(path[i]);
+				scc_of[next] = scc_of[node];
+				dfs2(rev_adj, next);
+			}
+		}
+	}
+
+	void kosaraju(vector<vector<int>>& adj, vector<vector<int>>& rev_adj) {
+
+		fr(v, 0, N) {
+
+			if(!vtd[v]) dfs1(adj, v);
+		}
+
+		reverse(path.begin(), path.end());
+
+		fr(i, 0, N) {
+
+			if(scc_of[path[i]] == -1) {
+
+				scc_of[path[i]] = scc_id++;
+				dfs2(rev_adj, path[i]);
+			}
 		}
 	}
 }

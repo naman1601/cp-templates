@@ -27,7 +27,7 @@ struct LCA {
 	vi time, path, ret, depth;
 	RMQ<int> rmq;
 
-	LCA(vector<vi>& C) : time(sz(C)), depth(sz(C), 0) rmq((dfs(C,0,-1), ret)) {}
+	LCA(vector<vi>& C) : time(sz(C)), depth(sz(C), 0), rmq((dfs(C,0,-1), ret)) {}
 	void dfs(vector<vi>& C, int v, int par) {
 		time[v] = T++;
 		for (int y : C[v]) if (y != par) {
