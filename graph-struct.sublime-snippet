@@ -11,7 +11,7 @@ struct graph {
 
 	graph(){}
 
-	graph(int _n_nodes, int _n_edges) : n_nodes(_n_nodes), n_edges(_n_edges) {
+	graph(int _n_nodes) : n_nodes(_n_nodes) {
 
 		g.clear();
 		g.resize(n_nodes);
@@ -22,6 +22,13 @@ struct graph {
 		g[u].push_back(v);
 		g[v].push_back(u);
 	}
+
+	// void add_edge(int u, int v, int e) {
+
+	// 	g[u].emplace_back(v, e);
+	// 	g[v].emplace_back(u, e);
+	// 	edges.emplace_back(u, v);
+	// }
 };
 ]]></content>
 	<tabTrigger>graph-struct</tabTrigger>
