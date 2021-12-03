@@ -1,10 +1,12 @@
 <snippet>
 	<content><![CDATA[
+// include DSU struct
+// include graph struct
 // uses vector adj of the form pair<int, int> : {next node, edge id}
 vector<int> low, t_in, vtd, is_bridge;
 int timer = 0;
 
-void bridge_dfs(int v, int p = -1) {
+void bridge_dfs(vector<vector<pii>>& adj, int v, int p = -1) {
 
 	vtd[v] = 1;
 	t_in[v] = low[v] = timer++;
@@ -24,7 +26,7 @@ void bridge_dfs(int v, int p = -1) {
 
 		} else {
 
-			bridge_dfs(u, v);
+			bridge_dfs(adj, u, v);
 			low[v] = min(low[v], low[u]);
 
 			if(low[u] > t_in[v]) {
@@ -35,20 +37,45 @@ void bridge_dfs(int v, int p = -1) {
 	}
 }
 
-void find_bridges() {
+void find_bridges(vector<vector<pii>>& adj, vector<pii>& edges) {
 
-	low.assign(n_nodes, -1);
-	t_in.assign(n_nodes, -1);
-	vtd.assign(n_nodes, 0);
-	is_bridge.assign(n_edges, 0);
+	int N = (int)adj.size();
+	int E = (int)edges.size();
 
-	fr(v, 0, n_nodes) {
+	low.assign(N, -1);
+	t_in.assign(N, -1);
+	vtd.assign(N, 0);
+	is_bridge.assign(E, 0);
+
+	fr(v, 0, N) {
 
 		if(!vtd[v]) {
 
-			bridge_dfs(v);
+			bridge_dfs(adj, v);
 		}
 	}
+}
+
+graph get_bridge_tree(graph& g) {
+
+	find_bridges(g.g, g.edges);
+	DSU og(g.n_nodes);
+
+	fr(i, 0, (int)g.edges.size()) {
+
+		if(is_bridge[i]) continue;
+		og.dsu(g.edges[i].fe, g.edges[i].se);
+	}
+
+	graph bridge_tree(g.n_nodes);
+
+	fr(i, 0, (int)g.edges.size()) {
+
+		if(!is_bridge[i]) continue;
+		bridge_tree.add_edge(og.component_of[g.edges[i].fe], og.component_of[g.edges[i].se], i);
+	}
+
+	return bridge_tree;
 }
 ]]></content>
 	<tabTrigger>bridge-finding</tabTrigger>

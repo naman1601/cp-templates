@@ -1,0 +1,32 @@
+<snippet>
+	<content><![CDATA[
+pii diameter_dfs(vector<vector<int>>& adj, int v, int d, int p = -1) {
+
+	auto cur = make_pair(v, d);
+
+	for(int u : adj[v]) {
+
+		if(u == p) continue;
+
+		auto pr = diameter_dfs(adj, u, d + 1, v);
+
+		if(pr.se > cur.se) {
+
+			cur = pr;
+		}
+	}
+
+	return cur;
+}
+
+
+int get_diameter(vector<vector<int>>& adj, int v) {
+
+	int u = diameter_dfs(adj, v, 0).fe;
+	return diameter_dfs(adj, u, 0).se;
+}
+]]></content>
+	<tabTrigger>get-tree-diameter</tabTrigger>
+	<scope>source.c++</scope>
+	<description>Tree diameter using DFS</description>
+</snippet>
