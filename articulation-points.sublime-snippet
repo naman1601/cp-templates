@@ -1,0 +1,70 @@
+<snippet>
+	<content><![CDATA[
+vector<int> tree_edge, n_ch, tim, vtd, articulation_points;
+int timer = 0;
+
+int articulation_point_dfs(vector<vector<pii>>& adj, int v) {
+
+	tim[v] = timer++;
+	vtd[v] = 1;
+	int retval = -1;
+	int gud = 0;
+
+	for(auto e : adj[v]) {
+
+		int u = e.fe, id = e.se;
+		if(tree_edge[id] != -1) continue;
+
+		if(vtd[u]) {
+
+			tree_edge[id] = 0;
+			if(retval == -1 || tim[u] < tim[retval]) retval = u;
+
+		} else {
+
+			n_ch[v]++;
+			tree_edge[id] = 1;
+			int cur = articulation_point_dfs(adj, u);
+
+			if((cur == -1 || tim[cur] >= tim[v]) && v != root) {
+
+				gud++;
+			}
+
+			if(cur != -1) {
+
+				if(retval == -1 || tim[cur] < tim[retval]) retval = cur;
+			}
+		}
+	}
+
+	if(gud) {
+
+		articulation_points.push_back(v);
+	}
+
+	return retval;
+}
+
+
+void find_articulation_points(vector<vector<pii>>& adj, vector<pii>& edges) {
+
+	int N = adj.size();
+	int E = edges.size();
+	tree_edge.assign(E, -1);
+	n_ch.assign(N, 0);
+	tim.assign(N, 0);
+	vtd.assign(N, 0);
+
+	fr(v, 0, N) {
+
+		if(vtd[v]) continue;
+		dfs(adj, v);
+		if(n_ch[v] > 1) ans.push_back(v);
+	}
+}
+]]></content>
+	<tabTrigger>articulation-points</tabTrigger>
+	<scope>source.c++</scope>
+	<description>Find Articulation Points of undirected graph</description>
+</snippet>
