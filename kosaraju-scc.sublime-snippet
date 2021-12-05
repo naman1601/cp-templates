@@ -72,7 +72,7 @@ struct SCC {
 			}
 		}
 	}
-}
+};
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
 	<tabTrigger>kosaraju_scc</tabTrigger>

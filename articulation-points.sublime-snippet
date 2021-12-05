@@ -1,7 +1,7 @@
 <snippet>
 	<content><![CDATA[
 vector<int> tree_edge, n_ch, tim, vtd, articulation_points;
-int timer = 0;
+int timer = 0, root = -1;
 
 int articulation_point_dfs(vector<vector<pii>>& adj, int v) {
 
@@ -59,8 +59,9 @@ void find_articulation_points(vector<vector<pii>>& adj, vector<pii>& edges) {
 	fr(v, 0, N) {
 
 		if(vtd[v]) continue;
-		dfs(adj, v);
-		if(n_ch[v] > 1) ans.push_back(v);
+		root = v;
+		articulation_point_dfs(adj, v);
+		if(n_ch[v] > 1) articulation_points.push_back(v);
 	}
 }
 ]]></content>
