@@ -1,40 +1,46 @@
 <snippet>
 	<content><![CDATA[
-// include DSU struct
-// include graph struct
+// include DSU struct for bridge tree
+// include graph struct for bridge tree
 // uses vector adj of the form pair<int, int> : {next node, edge id}
-vector<int> low, t_in, vtd, is_bridge;
+vector<int> vtd, is_bridge, tree_edge, t_in;
 int timer = 0;
 
-void bridge_dfs(vector<vector<pii>>& adj, int v, int p = -1) {
-
+int bridge_dfs(vector<vector<pii>>& adj, int v, int p = -1) {
+	
+	// p is the id of parent edge
+	t_in[v] = timer++;
 	vtd[v] = 1;
-	t_in[v] = low[v] = timer++;
+	int retval = -1;
 
 	for(auto e : adj[v]) {
 
 		int u = e.fe, edge_id = e.se;
 
-		if(u == p) {
+		if(tree_edge[edge_id] != -1) {
 
 			continue;
 		}
 
 		if(vtd[u]) {
 
-			low[v] = min(low[v], t_in[u]);
+			tree_edge[edge_id] = 0;
+			if((retval == -1) || (t_in[u] < t_in[retval])) retval = u;
 
 		} else {
 
-			bridge_dfs(adj, u, v);
-			low[v] = min(low[v], low[u]);
-
-			if(low[u] > t_in[v]) {
-
-				is_bridge[edge_id] = 1;
-			}
+			tree_edge[edge_id] = 1;
+			int cur = bridge_dfs(adj, u, edge_id);
+			if((cur != -1) && ((retval == -1) || (t_in[cur] < t_in[retval]))) retval = cur;
 		}
 	}
+
+	if((p != -1) && ((retval == -1) || (t_in[retval] >= t_in[v]))) {
+
+		is_bridge[p] = 1;
+	}
+
+	return retval;
 }
 
 void find_bridges(vector<vector<pii>>& adj, vector<pii>& edges) {
@@ -42,10 +48,10 @@ void find_bridges(vector<vector<pii>>& adj, vector<pii>& edges) {
 	int N = (int)adj.size();
 	int E = (int)edges.size();
 
-	low.assign(N, -1);
-	t_in.assign(N, -1);
+	t_in.assign(N, 0);
 	vtd.assign(N, 0);
 	is_bridge.assign(E, 0);
+	tree_edge.assign(E, -1);
 
 	fr(v, 0, N) {
 
