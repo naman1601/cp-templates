@@ -2,41 +2,41 @@
 	<content><![CDATA[
 struct binlift {
 
-	int n, jump;
+	// THIS IMPLEMENTATION IS FOR WHEN VALUES ARE STORED IN THE EDGES
+
+	int N, JUMP;
 	vector<vector<int>> parent_table;
-	vector<int> logtable;
+	// vector<vector<long long>> tbl;
 
-	void init(int N, int JUMP) {
+	binlift() {}
 
-		n = N;
-		jump = JUMP;
-		parent_table = vector<vector<int>>(n, vector<int>(jump));
-		logtable = vector<int>(n + 1, 0);
-
-		fr(i, 2, n + 1) {
-
-			logtable[i] = logtable[i >> 1] + 1;
-		}
+	binlift(int _N, int _JUMP) : N(_N), JUMP(_JUMP) {
+		parent_table = vector<vector<int>>(JUMP, vector<int>(N, -1));
+		// tbl = vector<vector<long long>>(JUMP, vector<long long>(N, 0));
 	}
 
 	void add_node(int v, int p) {
+		parent_table[0][v] = p;
+	}
 
-		parent_table[v][0] = p;
+	// void add_node(int v, int p, long long w) {
+	// 	parent_table[0][v] = p;
+	// 	tbl[0][v] = w;
+	// }
+
+	long long merge(long long A, long long B) {
+		return max(A, B);
 	}
 
 	void build() {
 
-		fr(j, 1, jump) {
-
-			fr(v, 0, n) {
-
-				if(parent_table[v][j - 1] != -1) {
-
-					parent_table[v][j] = parent_table[parent_table[v][j - 1]][j - 1];
-
+		for(int j = 1; j < JUMP; j++) {
+			for(int v = 0; v < N; v++) {
+				if(parent_table[j - 1][v] != -1) {
+					parent_table[j][v] = parent_table[j - 1][parent_table[j - 1][v]];
+					// tbl[j][v] = merge(tbl[j - 1][v], tbl[j - 1][parent_table[j - 1][v]]);
 				} else {
-
-					parent_table[v][j] = -1;
+					parent_table[j][v] = -1;
 				}
 			}
 		}
@@ -44,27 +44,32 @@ struct binlift {
 
 	int lift_ancestor(int v, int dist) {
 
-		if(dist == 0) {
+		for(int bit = 0; bit < JUMP; bit++) {
+			if(v == -1) break;
 
-			return v;
+			if(dist & (1 << bit)) {
+				v = parent_table[bit][v];
+			}
 		}
 
-		int opt = logtable[dist];
-		
-		// int opt = 0;
-
-		// fr(j, 0, jump) {
-
-		// 	if((1 << j) > dist) {
-
-		// 		break;
-		// 	}
-
-		// 	opt = j;
-		// }
-
-		return lift_ancestor(parent_table[v][opt], dist - (1 << opt));
+		return v;
 	}
+
+	// long long lift(int v, int dist) {
+
+	// 	long long retval = 0;
+
+	// 	for(int bit = 0; bit < JUMP; bit++) {
+	// 		if(v == -1) break;
+
+	// 		if(dist & (1 << bit)) {
+	// 			retval = merge(retval, tbl[bit][v]);
+	// 			v = parent_table[bit][v];
+	// 		}
+	// 	}
+
+	// 	return retval;
+	// }
 };
 ]]></content>
 	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
