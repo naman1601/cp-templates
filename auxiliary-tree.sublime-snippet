@@ -1,0 +1,76 @@
+<snippet>
+	<content><![CDATA[
+// requires LCA (named l)
+
+int N;
+cin >> N;
+
+input_vertices.assign(N, 0);
+cin >> input_vertices;
+for(int& v : input_vertices) v--;
+
+int N_og = N;
+vector<int> og_input_vertices = input_vertices;
+sort(og_input_vertices.begin(), og_input_vertices.end());
+
+sort(input_vertices.begin(), input_vertices.end(), [&](auto alpha, auto beta) {
+	return l.tin[alpha] < l.tin[beta];
+});
+
+fr(i, 0, N - 1) {
+
+	int anc = l.lca(input_vertices[i], input_vertices[i + 1]);
+	input_vertices.push_back(anc);
+}
+
+sort(input_vertices.begin(), input_vertices.end());
+input_vertices.resize(unique(input_vertices.begin(), input_vertices.end()) - input_vertices.begin());
+
+N = (int)input_vertices.size();
+sort(input_vertices.begin(), input_vertices.end(), [&](auto alpha, auto beta) {
+	return l.tin[alpha] < l.tin[beta];
+});
+
+graph aux(N);
+vector<int> stacc;
+vector<int> is_og(N, 0);
+
+fr(i, 0, N) {
+
+	int v = input_vertices[i];
+	int idx = lower_bound(og_input_vertices.begin(), og_input_vertices.end(), v) - og_input_vertices.begin();
+
+	if(idx < N_og && og_input_vertices[idx] == v) {
+		is_og[i] = 1;
+	}
+}
+
+fr(v, 0, N) {
+
+	while(true) {
+
+		if(stacc.empty()) {
+
+			stacc.push_back(v);
+			break;
+		}
+
+		int u = stacc.back();
+
+		if(l.tin[input_vertices[u]] <= l.tin[input_vertices[v]] && l.tout[input_vertices[u]] >= l.tin[input_vertices[v]]) {
+
+			aux.add_edge(u, v);
+			stacc.push_back(v);
+			break;
+
+		} else {
+
+			stacc.pop_back();
+		}
+	}
+}
+]]></content>
+	<tabTrigger>auxiliary-tree</tabTrigger>
+	<scope>source.c++</scope>
+	<description>Auxiliary tree snippet</description>
+</snippet>
