@@ -53,20 +53,14 @@ istream& operator >>(istream& istream, vector<T>& v) {
 	return istream;
 }
 
-typedef long long big;
-typedef long double ludo;
-#define pbb pair<big, big>
-#define pii pair<int, int>
+using big = long long;
+using ludo = long double;
+using pii = pair<int, int>;
+using pbb = pair<long long, long long>;
 #define fe first
 #define se second
-#define maxheap priority_queue
-#define mset multiset
-#define uset unordered_set
-#define umap unordered_map
 #define fr(i, s, e) for(int i = s; i < e; i++)
 #define revfr(i, s, e) for(int i = s - 1; i >= e; i--)
-#define getv(v, n) for(int i = 0; i < n; i++) cin >> v[i];
-#define speed ios_base::sync_with_stdio(false); cin.tie(NULL)
 #define nl "\n"
 
 #ifdef naman1601
@@ -89,7 +83,8 @@ void solve() {
 
 int main() {
 	
-	speed;
+	ios_base::sync_with_stdio(false); cin.tie(NULL);
+	// FAST I/O
 
 	int TC = 1;
 	${2:}cin >> TC;
