@@ -1,0 +1,51 @@
+<snippet>
+	<content><![CDATA[
+// dsu() and find() in O(log) time
+// rollback() in O(1)
+
+struct DSU {
+
+	DSU(){}
+
+	int N;
+	vector<int> parent, sz;
+	vector<pair<int, int>> history;
+
+	DSU(int _N) : N(_N) {
+
+		parent = vector<int>(N);
+		sz = vector<int>(N, 1);
+		iota(parent.begin(), parent.end(), 0);
+	}
+
+	int find(int v) {
+
+		if(parent[v] == v) return v;
+		else return find(parent[v]);
+	}
+
+	int dsu(int u, int v) {
+
+		u = find(u); v = find(v);
+		if(u == v) return 0;
+
+		if(sz[v] > sz[u]) swap(u, v);
+		history.emplace_back(v, u);
+		parent[v] = u;
+		sz[u] += sz[v];
+		return 1;
+	}
+
+	void rollback() {
+
+		auto [v, u] = history.back();
+		history.pop_back();
+		sz[u] -= sz[v];
+		parent[v] = v;
+	}
+};
+]]></content>
+	<tabTrigger>rollback-dsu</tabTrigger>
+	<scope>source.c++</scope>
+	<description>DSU with rollback</description>
+</snippet>
