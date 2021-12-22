@@ -63,12 +63,6 @@ using pbb = pair<long long, long long>;
 #define revfr(i, s, e) for(int i = s - 1; i >= e; i--)
 #define nl "\n"
 
-#ifdef naman1601
-#define debug(text) cout << (#text) << ": " << text << endl;
-#else
-#define debug(text)
-#endif
-
 const big mod = 1000000007;
 // const big mod = 998244353;
 const big infinity = 1000000000000000000;
