@@ -19,7 +19,7 @@ struct segt {
 
 		tl = (int)v.size();
 		t = vector<T>(tl << 2, 0);
-		t.build(v);
+		build(v);
 	}
 
 	T task(T child1, T child2) {
