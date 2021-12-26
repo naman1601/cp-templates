@@ -1,0 +1,35 @@
+<snippet>
+	<content><![CDATA[
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef long long big;
+#define speed ios_base::sync_with_stdio(false); cin.tie(NULL)
+
+
+void solve() {
+
+	
+}
+
+
+int main() {
+	
+	speed;
+
+	int TC = 1;
+	cin >> TC;
+
+	for(int tc = 1; tc <= TC; tc++) {
+
+		// cout << "Case #" << tc << ": ";
+		solve();
+	}
+
+	return 0;
+}
+]]></content>
+	<tabTrigger>usaco-temp</tabTrigger>
+	<scope>source.c++</scope>
+	<description>usaco temp</description>
+</snippet>

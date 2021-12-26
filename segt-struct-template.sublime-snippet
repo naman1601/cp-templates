@@ -6,15 +6,25 @@ struct segt {
 	int tl;
 	vector<T> t;
 
+	segt() {}
+
 	segt(int l, T val) {
 
 		tl = l;
 		t = vector<T>(tl << 2, val);
 	}
 
+	template<typename S>
+	segt(vector<S>& v) {
+
+		tl = (int)v.size();
+		t = vector<T>(tl << 2, 0);
+		t.build(v);
+	}
+
 	T task(T child1, T child2) {
 	
-		return child1 + child2;
+		return ${1:child1 + child2};
 	}
 	
 	void update(int node, int l, int r, int pos, T val) {
@@ -49,7 +59,7 @@ struct segt {
 	
 		if(lq > rq) {
 	
-			return 0;
+			return ${2:0};
 	
 		} else if(lq <= l && rq >= r) {
 	
