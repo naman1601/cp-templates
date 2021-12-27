@@ -1,18 +1,14 @@
 <snippet>
 	<content><![CDATA[
-// big shortest_path[maxn];
 vector<big> shortest_path;
 
-void dijkstra() {
+void dijkstra(int n_nodes, vector<vector<int>>& adj, int root = 0) {
 
 	shortest_path.assign(n_nodes, infinity);
+	shortest_path[root] = 0;
 
-	// fr(i, 0, n_nodes - 1) shortest_path[i] = infinity;
-	
-	shortest_path[0] = 0;
-
-	maxheap<pbb> pq;
-	pq.push(make_pair(0, 0));
+	priority_queue<pair<long long, long long>> pq;
+	pq.push(make_pair(0, root));
 
 	while(!pq.empty()) {
 

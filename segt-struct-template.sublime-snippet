@@ -77,7 +77,8 @@ struct segt {
 		return query(1, 0, tl - 1, lq, rq);
 	}
 	
-	void build(vector<T>& v, int node, int l, int r) {
+	template<typename S>
+	void build(vector<S>& v, int node, int l, int r) {
 	
 		if(l == r) {
 	
@@ -92,7 +93,8 @@ struct segt {
 		}
 	}
 
-	void build(vector<T>& v) {
+	template<typename S>
+	void build(vector<S>& v) {
 
 		build(v, 1, 0, tl - 1);
 	}

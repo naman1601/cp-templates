@@ -3,6 +3,7 @@
 // #include "../various/BumpAllocator.h"
 
 // LECT INCLUSIVE, RIGHT EXCLUSIVE
+// Usage: Node* tr = new Node(v, 0, sz(v));
 
 struct Node {
 	Node *l = 0, *r = 0;
