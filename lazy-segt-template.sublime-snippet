@@ -18,6 +18,16 @@ struct lazyt {
 		pending_assign = vector<int>(tl << 2, 0);
 	}
 
+	template<typename S>
+	lazyt(vector<S>& v) {
+
+		tl = (int)v.size();
+		t = vector<T>(tl << 2, 0);
+		lazy = vector<T>(tl << 2, 0);
+		pending_assign = vector<int>(tl << 2, 0);
+		build(v);
+	}
+
 
 	T task(T child1, T child2) {
 	 
@@ -140,10 +150,10 @@ struct lazyt {
 	T query(int lq, int rq) {
 
 		return query(1, 0, tl - 1, lq, rq);
-	}
+	} 
 	 
-	 
-	void build(vector<T>& v, int node, int l, int r) {
+	template<typename S>
+	void build(vector<S>& v, int node, int l, int r) {
 	 
 		if(l == r) {
 	 
@@ -158,7 +168,8 @@ struct lazyt {
 		}
 	}
 
-	void build(vector<T>& v) {
+	template<typename S>
+	void build(vector<S>& v) {
 
 		build(v, 1, 0, tl - 1);
 	}
